@@ -1,6 +1,5 @@
 import numpy as np
 import re
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -13,19 +12,29 @@ logger = logging.getLogger(__name__)
 
 # Download NLTK resources if not already downloaded
 try:
-    nltk.data.find('tokenizers/punkt')
     nltk.data.find('corpora/stopwords')
     nltk.data.find('corpora/wordnet')
 except LookupError:
-    nltk.download('punkt')
     nltk.download('stopwords')
     nltk.download('wordnet')
 
 class CareerRecommendationEngine:
     def __init__(self):
         self.vectorizer = TfidfVectorizer()
-        self.stop_words = set(stopwords.words('english'))
-        self.lemmatizer = WordNetLemmatizer()
+        # Try to load stopwords, fallback to empty set if it fails
+        try:
+            self.stop_words = set(stopwords.words('english'))
+        except Exception as e:
+            logger.warning(f"Could not load stopwords, using empty set instead: {e}")
+            self.stop_words = set()
+            
+        # Initialize lemmatizer with error handling
+        try:
+            self.lemmatizer = WordNetLemmatizer()
+        except Exception as e:
+            logger.warning(f"Could not initialize lemmatizer: {e}")
+            # Create a simple pass-through "lemmatizer"
+            self.lemmatizer = type('DummyLemmatizer', (), {'lemmatize': lambda self, word: word})()
         
     def preprocess_text(self, text):
         """Preprocess text by tokenizing, removing stopwords, and lemmatizing."""
@@ -35,8 +44,8 @@ class CareerRecommendationEngine:
         # Lowercase and remove special characters
         text = re.sub(r'[^\w\s]', '', text.lower())
         
-        # Tokenize
-        tokens = word_tokenize(text)
+        # Tokenize using simple split (avoid NLTK tokenizer issues)
+        tokens = text.split()
         
         # Remove stopwords and lemmatize
         tokens = [self.lemmatizer.lemmatize(token) for token in tokens if token not in self.stop_words]
