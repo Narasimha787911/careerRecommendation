@@ -206,18 +206,39 @@ def process_assessment():
         preferred_industries = request.form.getlist('preferred_industries')
         work_values = request.form.getlist('work_values')
         
+        # Debug log the assessment data
+        logger.debug(f"Assessment data: skills={additional_skills}, industries={preferred_industries}, values={work_values}")
+        
         # Merge with user profile data
+        user_skills = current_user.get_skills() if current_user.get_skills() else []
+        user_interests = current_user.get_interests() if current_user.get_interests() else []
+        
         user_data = {
             'id': current_user.id,
             'name': current_user.name,
-            'skills': current_user.get_skills() + additional_skills,
+            'skills': user_skills + additional_skills,
             'education': current_user.get_education(),
             'experience': current_user.get_experience(),
-            'interests': current_user.get_interests() + preferred_industries + work_values
+            'interests': user_interests + preferred_industries + work_values
         }
+        
+        # Debug log the user data
+        logger.debug(f"User data: {user_data}")
         
         # Get all careers and market trends
         careers = Career.query.all()
+        
+        # Debug log the careers data
+        logger.debug(f"Found {len(careers)} careers in database")
+        
+        if not careers:
+            # If no careers exist, run the seed data function
+            logger.debug("No careers found, running seed data")
+            # Call seed_data function directly
+            seed_data()
+            # Get careers again
+            careers = Career.query.all()
+            
         careers_data = []
         
         for career in careers:
@@ -229,6 +250,7 @@ def process_assessment():
                 'industry': career.industry
             })
         
+        # Get market trends
         market_trends = MarketTrend.query.all()
         trends_data = []
         
@@ -245,6 +267,9 @@ def process_assessment():
             careers_data, 
             trends_data
         )
+        
+        # Debug log recommendations
+        logger.debug(f"Generated {len(recommendations)} recommendations")
         
         # Save recommendations to database
         for rec in recommendations:
@@ -268,12 +293,15 @@ def process_assessment():
                 db.session.add(new_rec)
         
         db.session.commit()
+        logger.debug("Recommendations saved successfully")
+        
         flash('Assessment completed! View your career recommendations below.', 'success')
         return redirect(url_for('recommendations'))
     
     except Exception as e:
         db.session.rollback()
         logger.error(f"Error processing assessment: {e}")
+        logger.exception("Full exception details:")
         flash('An error occurred while processing your assessment. Please try again.', 'danger')
         return redirect(url_for('assessment'))
 
@@ -423,8 +451,6 @@ def internal_error(error):
 # Add seed data for initial setup
 @app.route('/seed_data', methods=['GET'])
 def seed_data():
-    if not app.debug:
-        return jsonify({'error': 'This route is only available in debug mode'}), 403
     
     try:
         # Create AI Model
