@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ career.title }} - AI Career Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="career-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h2 class="mb-2">{{ career.title }}</h2>
+                    <div class="mb-3">
+                        <span class="badge bg-light text-dark me-2"><i class="fas fa-dollar-sign me-1"></i>${{ career.avg_salary|int|format(',') }}</span>
+                        <span class="badge bg-light text-dark me-2"><i class="fas fa-chart-line me-1"></i>{{ career.growth_rate }}% Growth</span>
+                        <span class="badge bg-light text-dark"><i class="fas fa-graduation-cap me-1"></i>{{ career.education_required }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                    <a href="{{ url_for('market_trends', career_id=career.id) }}" class="btn btn-light"><i class="fas fa-chart-line me-2"></i>View Market Trends</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-transparent py-3">
+                <h4 class="mb-0">Career Overview</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-8 mb-4 mb-md-0">
+                        <h5 class="mb-3">Description</h5>
+                        <p>{{ career.description }}</p>
+                        
+                        <h5 class="mt-4 mb-3">Required Skills</h5>
+                        <div class="mb-4">
+                            {% for skill in career.skills %}
+                                <span class="badge bg-primary bg-opacity-10 text-primary skill-badge">{{ skill.name }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">Job Outlook</h5>
+                        <p>{{ career.job_outlook }}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 bg-light">
+                            <div class="card-body p-4">
+                                <h5 class="mb-3">At a Glance</h5>
+                                <ul class="list-group list-group-flush bg-transparent">
+                                    <li class="list-group-item bg-transparent px-0 py-2 border-top-0">
+                                        <strong>Average Salary:</strong>
+                                        <div class="mt-1">${{ career.avg_salary|int|format(',') }}</div>
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Annual Growth Rate:</strong>
+                                        <div class="mt-1">{{ career.growth_rate }}%</div>
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Education Required:</strong>
+                                        <div class="mt-1">{{ career.education_required }}</div>
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Experience Required:</strong>
+                                        <div class="mt-1">{{ career.experience_required }}</div>
+                                    </li>
+                                    <li class="list-group-item bg-transparent px-0 py-2">
+                                        <strong>Work Environment:</strong>
+                                        <div class="mt-1">{{ career.work_environment }}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if charts and trends %}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-transparent py-3">
+                    <h4 class="mb-0">Market Trends</h4>
+                </div>
+                <div class="card-body p-4">
+                    <p class="lead mb-4">Here's an overview of recent market trends for {{ career.title }}:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-4">
+                            <div class="trend-chart">
+                                <h5 class="mb-3">Demand Level Trend</h5>
+                                <img src="data:image/png;base64,{{ charts.demand_chart }}" alt="Demand Level Trend" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="trend-chart">
+                                <h5 class="mb-3">Salary Change Trend</h5>
+                                <img src="data:image/png;base64,{{ charts.salary_chart }}" alt="Salary Change Trend" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4">
+                            <div class="trend-chart">
+                                <h5 class="mb-3">Job Posting Count</h5>
+                                <img src="data:image/png;base64,{{ charts.job_chart }}" alt="Job Posting Count Trend" class="img-fluid">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a href="{{ url_for('market_trends', career_id=career.id) }}" class="btn btn-primary">View Detailed Trend Analysis</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="text-center mb-4">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary me-2">Back to Dashboard</a>
+            <a href="{{ url_for('assessment') }}" class="btn btn-success">Take New Assessment</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

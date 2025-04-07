@@ -1,71 +1,45 @@
-import logging
+import re
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-import re
-import string
-import os
 import pickle
-import nltk
+import string
+import logging
+from datetime import datetime
 
 # Configure logging
 logger = logging.getLogger(__name__)
 
 class CareerRecommendationEngine:
     def __init__(self):
-        self.vectorizer = None
+        self.vectorizer = TfidfVectorizer(stop_words='english')
+        self.careers = []
         self.career_vectors = None
-        self.careers = None
+        self.career_titles = []
         
-        # Try to download NLTK data, but handle failures gracefully
-        try:
-            nltk.download('punkt', quiet=True)
-            nltk.download('stopwords', quiet=True)
-            self.stopwords = set(nltk.corpus.stopwords.words('english'))
-            self.use_nltk = True
-        except Exception as e:
-            logger.warning(f"Failed to download NLTK resources: {e}. Using simple tokenization instead.")
-            self.stopwords = set(['i', 'me', 'my', 'myself', 'we', 'our', 'ours', 'ourselves', 'you', 'your', 'yours',
-                                 'yourself', 'yourselves', 'he', 'him', 'his', 'himself', 'she', 'her', 'hers',
-                                 'herself', 'it', 'its', 'itself', 'they', 'them', 'their', 'theirs', 'themselves',
-                                 'what', 'which', 'who', 'whom', 'this', 'that', 'these', 'those', 'am', 'is', 'are',
-                                 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had', 'having', 'do', 'does',
-                                 'did', 'doing', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until',
-                                 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into',
-                                 'through', 'during', 'before', 'after', 'above', 'below', 'to', 'from', 'up', 'down',
-                                 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'once', 'here',
-                                 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both', 'each', 'few', 'more',
-                                 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'only', 'own', 'same', 'so',
-                                 'than', 'too', 'very', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now'])
-            self.use_nltk = False
-
     def preprocess_text(self, text):
         """Preprocess text by removing punctuation, numbers, and stopwords."""
         if not text:
             return ""
             
-        # Convert to lowercase and remove punctuation
-        text = text.lower()
-        text = re.sub(r'[^\w\s]', '', text)
-        
-        # Remove numbers
-        text = re.sub(r'\d+', '', text)
-        
-        # Tokenize the text
-        if self.use_nltk:
-            try:
-                tokens = nltk.word_tokenize(text)
-            except Exception as e:
-                logger.warning(f"NLTK tokenization failed: {e}. Using simple split.")
-                tokens = text.split()
-        else:
-            tokens = text.split()
+        try:
+            # Convert to lowercase
+            text = text.lower()
             
-        # Remove stopwords
-        tokens = [word for word in tokens if word not in self.stopwords]
-        
-        return ' '.join(tokens)
-
+            # Remove punctuation
+            text = re.sub(f'[{string.punctuation}]', ' ', text)
+            
+            # Remove numbers
+            text = re.sub(r'\d+', '', text)
+            
+            # Remove extra whitespace
+            text = re.sub(r'\s+', ' ', text).strip()
+            
+            return text
+        except Exception as e:
+            logger.error(f"Error preprocessing text: {e}")
+            return text or ""
+    
     def create_career_vectors(self, careers):
         """
         Create TF-IDF vectors for careers
@@ -73,22 +47,31 @@ class CareerRecommendationEngine:
         Args:
             careers: List of career objects with title, description, and skills
         """
-        logger.info(f"Creating career vectors for {len(careers)} careers")
         self.careers = careers
         
-        # Create text representations for each career
-        career_texts = []
-        for career in careers:
-            # Combine title, description, and skills into a single text
-            skill_text = ' '.join([skill.name + ' ' + (skill.description or '') for skill in career.skills])
-            career_text = f"{career.title} {career.description or ''} {skill_text}"
-            career_texts.append(self.preprocess_text(career_text))
+        # Prepare document corpus for each career
+        career_documents = []
+        self.career_titles = []
         
-        # Create and fit TF-IDF vectorizer
-        self.vectorizer = TfidfVectorizer(max_features=5000)
-        self.career_vectors = self.vectorizer.fit_transform(career_texts)
-        logger.info("Career vectors created successfully")
-
+        for career in careers:
+            # Combine title, description, and skills
+            skill_text = ' '.join([skill.name + ' ' + (skill.description or '') for skill in career.skills])
+            
+            document = f"{career.title} {career.description or ''} {skill_text} {career.education_required or ''} {career.work_environment or ''}"
+            document = self.preprocess_text(document)
+            
+            career_documents.append(document)
+            self.career_titles.append(career.title)
+        
+        try:
+            # Create TF-IDF vectors
+            self.career_vectors = self.vectorizer.fit_transform(career_documents)
+            logger.info(f"Created TF-IDF vectors for {len(careers)} careers")
+        except Exception as e:
+            logger.error(f"Error creating career vectors: {e}")
+            # Initialize with empty vectors as fallback
+            self.career_vectors = np.zeros((len(careers), 1))
+    
     def create_user_vector(self, user_data):
         """
         Create a TF-IDF vector from user assessment data
@@ -96,42 +79,30 @@ class CareerRecommendationEngine:
         Args:
             user_data: Dictionary containing user skills, interests, etc.
         """
-        logger.info("Creating user vector")
-        if not self.vectorizer:
-            raise ValueError("Career vectors must be created before user vectors")
+        if not self.vectorizer or not self.career_vectors:
+            logger.error("Vectorizer not initialized. Please call create_career_vectors first.")
+            return None
         
-        # Combine all user data into a single text
-        user_text = ""
-        if 'skills' in user_data and user_data['skills']:
-            skills_text = ' '.join([skill.name + ' ' + (skill.description or '') for skill in user_data['skills']])
-            user_text += skills_text + " "
+        try:
+            # Combine user data into a single document
+            skills_text = ' '.join([skill.name + ' ' + (skill.description or '') for skill in user_data.get('skills', [])])
+            interests = user_data.get('interests', '')
+            strengths = user_data.get('strengths', '')
+            personality = user_data.get('personality_traits', '')
+            education = user_data.get('education_level', '')
+            
+            user_document = f"{skills_text} {interests} {strengths} {personality} {education}"
+            user_document = self.preprocess_text(user_document)
+            
+            # Transform using the vectorizer fit on career data
+            user_vector = self.vectorizer.transform([user_document])
+            return user_vector
         
-        if 'interests' in user_data and user_data['interests']:
-            user_text += user_data['interests'] + " "
-            
-        if 'strengths' in user_data and user_data['strengths']:
-            user_text += user_data['strengths'] + " "
-            
-        if 'personality_traits' in user_data and user_data['personality_traits']:
-            user_text += user_data['personality_traits'] + " "
-            
-        # Add education and preferences
-        if 'education_level' in user_data and user_data['education_level']:
-            user_text += user_data['education_level'] + " "
-            
-        if 'preferences' in user_data and user_data['preferences']:
-            pref = user_data['preferences']
-            if hasattr(pref, 'salary_preference') and pref.salary_preference:
-                user_text += f"salary {pref.salary_preference} "
-            if hasattr(pref, 'location_preference') and pref.location_preference:
-                user_text += f"location {pref.location_preference} "
-                
-        preprocessed_text = self.preprocess_text(user_text)
-        logger.debug(f"Preprocessed user text: {preprocessed_text[:100]}...")
-        
-        # Transform using the existing vectorizer
-        return self.vectorizer.transform([preprocessed_text])
-
+        except Exception as e:
+            logger.error(f"Error creating user vector: {e}")
+            # Return a zero vector as fallback
+            return np.zeros((1, self.career_vectors.shape[1]))
+    
     def get_career_recommendations(self, user_data, top_n=5):
         """
         Get career recommendations for a user
@@ -143,66 +114,114 @@ class CareerRecommendationEngine:
         Returns:
             List of (career, score, reasoning) tuples
         """
-        logger.info(f"Getting top {top_n} career recommendations")
-        if not self.careers or not self.career_vectors or not self.vectorizer:
-            raise ValueError("Career data not initialized. Run create_career_vectors first.")
-            
-        # Create user vector
-        user_vector = self.create_user_vector(user_data)
+        if not self.careers or self.career_vectors is None:
+            logger.error("Career vectors not initialized. Please call create_career_vectors first.")
+            return []
         
-        # Calculate similarity scores
-        similarity_scores = cosine_similarity(user_vector, self.career_vectors).flatten()
+        try:
+            # Create user vector
+            user_vector = self.create_user_vector(user_data)
+            
+            if user_vector is None:
+                logger.error("Failed to create user vector")
+                return []
+            
+            # Calculate cosine similarity between user and careers
+            similarities = cosine_similarity(user_vector, self.career_vectors).flatten()
+            
+            # Get top N career indices
+            top_indices = similarities.argsort()[-top_n:][::-1]
+            
+            # Create recommendation list
+            recommendations = []
+            for idx in top_indices:
+                career = self.careers[idx]
+                score = similarities[idx]
+                
+                # Generate reasoning
+                reasoning = self.generate_recommendation_reasoning(career, user_data, score)
+                
+                recommendations.append((career, float(score), reasoning))
+            
+            return recommendations
         
-        # Get top N recommendations
-        top_indices = similarity_scores.argsort()[-top_n:][::-1]
-        
-        recommendations = []
-        for idx in top_indices:
-            career = self.careers[idx]
-            score = similarity_scores[idx]
-            
-            # Generate reasoning
-            reasoning = self.generate_recommendation_reasoning(career, user_data, score)
-            
-            recommendations.append((career, float(score), reasoning))
-            
-        return recommendations
-
+        except Exception as e:
+            logger.error(f"Error getting career recommendations: {e}")
+            return []
+    
     def generate_recommendation_reasoning(self, career, user_data, score):
         """Generate an explanation for why a career was recommended."""
-        reasoning = f"This career matches your profile with a {score:.2f} similarity score. "
-        
-        # Add reasoning based on skills match
-        if 'skills' in user_data and user_data['skills']:
-            user_skill_names = {skill.name.lower() for skill in user_data['skills']}
-            career_skill_names = {skill.name.lower() for skill in career.skills}
-            matching_skills = user_skill_names.intersection(career_skill_names)
+        try:
+            # Get user skills that match career skills
+            user_skills = set([skill.name.lower() for skill in user_data.get('skills', [])])
+            career_skills = set([skill.name.lower() for skill in career.skills])
+            
+            matching_skills = user_skills.intersection(career_skills)
+            
+            # Get user education level compatibility
+            education_match = "compatible"
+            user_education = user_data.get('education_level', '').lower()
+            career_education = (career.education_required or '').lower()
+            
+            if user_education and career_education:
+                if 'bachelor' in user_education and ('master' in career_education or 'phd' in career_education):
+                    education_match = "may need further education"
+                elif 'high school' in user_education and 'bachelor' in career_education:
+                    education_match = "may need further education"
+            
+            # Check interests alignment
+            interests_alignment = "moderate"
+            user_interests = (user_data.get('interests', '') or '').lower()
+            
+            if user_interests:
+                career_keywords = self.preprocess_text(career.title + ' ' + (career.description or '')).split()
+                interest_keywords = self.preprocess_text(user_interests).split()
+                
+                overlap = sum(1 for kw in interest_keywords if any(kw in ckw for ckw in career_keywords))
+                
+                if overlap > 3:
+                    interests_alignment = "strong"
+                elif overlap <= 1:
+                    interests_alignment = "limited"
+            
+            # Build reasoning
+            reasoning = f"This career has a {score:.0%} match with your profile."
             
             if matching_skills:
-                reasoning += f"You have {len(matching_skills)} relevant skills for this role: {', '.join(list(matching_skills)[:3])}. "
-                
-        # Add reasoning based on education match
-        if 'education_level' in user_data and user_data['education_level'] and career.education_required:
-            if user_data['education_level'].lower() in career.education_required.lower():
-                reasoning += f"Your education level ({user_data['education_level']}) matches the requirements. "
-                
-        # Add reasoning based on salary preferences
-        if 'preferences' in user_data and user_data['preferences']:
-            pref = user_data['preferences']
-            if hasattr(pref, 'salary_preference') and pref.salary_preference and career.avg_salary:
-                try:
-                    min_salary, max_salary = map(float, pref.salary_preference.split('-'))
-                    if min_salary <= career.avg_salary <= max_salary:
-                        reasoning += f"The average salary (${career.avg_salary:,.2f}) is within your preferred range. "
-                except (ValueError, AttributeError):
-                    pass
-                    
-        # Add growth rate information
-        if career.growth_rate:
-            reasoning += f"This career has a {career.growth_rate:.1f}% annual growth rate. "
+                skills_text = ", ".join(list(matching_skills)[:3])
+                if len(matching_skills) > 3:
+                    skills_text += f", and {len(matching_skills) - 3} more"
+                reasoning += f" You already have key skills needed: {skills_text}."
             
-        return reasoning
-
+            reasoning += f" Your education level is {education_match} with the requirements."
+            
+            if interests_alignment == "strong":
+                reasoning += " Your interests strongly align with this career field."
+            elif interests_alignment == "moderate":
+                reasoning += " Your interests seem to align with aspects of this field."
+            else:
+                reasoning += " This field may expose you to new areas beyond your current interests."
+            
+            # Add career growth information
+            if career.growth_rate:
+                reasoning += f" This career has a {career.growth_rate:.1f}% annual growth rate,"
+                if career.growth_rate > 10:
+                    reasoning += " which is excellent."
+                elif career.growth_rate > 5:
+                    reasoning += " which is good."
+                else:
+                    reasoning += " which is steady."
+            
+            # Add salary information
+            if career.avg_salary:
+                reasoning += f" The average salary is ${career.avg_salary:,.0f} per year."
+            
+            return reasoning
+            
+        except Exception as e:
+            logger.error(f"Error generating recommendation reasoning: {e}")
+            return f"This career has a {score:.0%} match with your profile based on your skills, interests, and preferences."
+    
     def analyze_career_market_trends(self, career_id):
         """
         Analyze market trends for a specific career
@@ -213,128 +232,146 @@ class CareerRecommendationEngine:
         Returns:
             Dictionary with trend analysis
         """
-        from models import MarketTrend, Career
-        
-        # Find the career
-        career = Career.query.get(career_id)
-        if not career:
-            return {"error": "Career not found"}
-            
-        # Get market trends for this career
-        trends = MarketTrend.query.filter_by(career_id=career_id).order_by(MarketTrend.year).all()
-        if not trends:
-            return {"error": "No market trend data available for this career"}
-            
-        # Extract trend data
-        years = [trend.year for trend in trends]
-        demand_levels = [trend.demand_level for trend in trends]
-        salary_trends = [trend.salary_trend for trend in trends]
-        job_counts = [trend.job_posting_count for trend in trends]
-        
-        # Calculate growth metrics
-        avg_demand_growth = np.mean(np.diff(demand_levels)) if len(demand_levels) > 1 else 0
-        avg_salary_growth = np.mean(salary_trends) if salary_trends else 0
-        total_job_growth = (job_counts[-1] - job_counts[0]) / job_counts[0] if len(job_counts) > 1 and job_counts[0] > 0 else 0
-        
-        # Prepare the analysis
-        analysis = {
-            "career": career.title,
-            "years_analyzed": years,
-            "demand_levels": demand_levels,
-            "salary_trends": salary_trends,
-            "job_posting_counts": job_counts,
-            "avg_demand_growth": float(avg_demand_growth),
-            "avg_salary_growth": float(avg_salary_growth),
-            "total_job_growth": float(total_job_growth),
-            "outlook": self._generate_outlook_summary(avg_demand_growth, avg_salary_growth, total_job_growth)
-        }
-        
-        return analysis
-        
-    def _generate_outlook_summary(self, demand_growth, salary_growth, job_growth):
-        """Generate a human-readable outlook summary based on trend data."""
-        outlook = ""
-        
-        # Demand growth assessment
-        if demand_growth > 0.1:
-            outlook += "Demand for this career is growing rapidly. "
-        elif demand_growth > 0:
-            outlook += "Demand for this career is showing steady growth. "
-        elif demand_growth > -0.05:
-            outlook += "Demand for this career is relatively stable. "
-        else:
-            outlook += "Demand for this career is declining. "
-            
-        # Salary growth assessment
-        if salary_growth > 0.05:
-            outlook += "Salaries are increasing at an above-average rate. "
-        elif salary_growth > 0.02:
-            outlook += "Salaries are growing steadily. "
-        elif salary_growth > 0:
-            outlook += "Salaries are increasing slightly. "
-        else:
-            outlook += "Salaries are stagnant or declining. "
-            
-        # Job growth assessment
-        if job_growth > 0.2:
-            outlook += "The number of job postings has increased significantly. "
-        elif job_growth > 0:
-            outlook += "The number of job postings has increased moderately. "
-        elif job_growth > -0.1:
-            outlook += "The number of job postings has remained relatively stable. "
-        else:
-            outlook += "The number of job postings has decreased. "
-            
-        # Overall assessment
-        if demand_growth > 0 and salary_growth > 0 and job_growth > 0:
-            outlook += "Overall, this career shows strong growth potential."
-        elif demand_growth > 0 or salary_growth > 0 or job_growth > 0:
-            outlook += "Overall, this career shows moderate growth potential."
-        else:
-            outlook += "Overall, this career may face challenges in the future."
-            
-        return outlook
-
-    def save_model(self, filepath='career_recommendation_model.pkl'):
-        """Save the model to a file."""
-        if not self.vectorizer or not self.career_vectors.any():
-            raise ValueError("Model not initialized")
-            
-        model_data = {
-            'vectorizer': self.vectorizer,
-            'career_vectors': self.career_vectors,
-            'career_ids': [career.id for career in self.careers]
-        }
+        from models import MarketTrend
         
         try:
+            # Get trend data for this career
+            trends = MarketTrend.query.filter_by(career_id=career_id).order_by(MarketTrend.year).all()
+            
+            if not trends or len(trends) < 2:
+                return {
+                    "error": "Insufficient trend data available for analysis",
+                    "years_analyzed": 0
+                }
+            
+            # Extract data points
+            years = [trend.year for trend in trends]
+            demand_levels = [trend.demand_level for trend in trends]
+            salary_trends = [trend.salary_trend for trend in trends]
+            job_counts = [trend.job_posting_count for trend in trends]
+            
+            # Calculate demand growth (simple linear regression)
+            n = len(years)
+            demand_slope = (n * sum(x*y for x, y in zip(years, demand_levels)) - sum(years) * sum(demand_levels)) / (n * sum(x*x for x in years) - sum(years)**2)
+            
+            # Calculate salary growth (use average of percentage changes)
+            salary_growth = sum(salary_trends) / len(salary_trends) if salary_trends else 0
+            
+            # Calculate job posting growth (CAGR - Compound Annual Growth Rate)
+            if job_counts and job_counts[0] > 0 and job_counts[-1] > 0:
+                years_diff = years[-1] - years[0]
+                job_growth = (job_counts[-1] / job_counts[0]) ** (1 / years_diff) - 1 if years_diff > 0 else 0
+            else:
+                job_growth = 0
+            
+            # Generate outlook summary
+            outlook_summary = self._generate_outlook_summary(demand_slope, salary_growth, job_growth)
+            
+            # Return the analysis
+            return {
+                "years_analyzed": len(years),
+                "years": years,
+                "demand_levels": demand_levels,
+                "salary_trends": salary_trends,
+                "job_posting_counts": job_counts,
+                "demand_growth": demand_slope,
+                "salary_growth": salary_growth,
+                "job_posting_growth": job_growth,
+                "outlook_summary": outlook_summary
+            }
+        
+        except Exception as e:
+            logger.error(f"Error analyzing market trends: {e}")
+            return {
+                "error": f"Error analyzing market trends: {str(e)}",
+                "years_analyzed": 0
+            }
+    
+    def _generate_outlook_summary(self, demand_growth, salary_growth, job_growth):
+        """Generate a human-readable outlook summary based on trend data."""
+        # Determine overall outlook
+        if demand_growth > 0.03 and salary_growth > 0.03 and job_growth > 0.05:
+            outlook = "excellent"
+        elif demand_growth > 0.01 and salary_growth > 0.02 and job_growth > 0.03:
+            outlook = "very good"
+        elif demand_growth > 0 and salary_growth > 0 and job_growth > 0:
+            outlook = "good"
+        elif demand_growth < -0.02 and salary_growth < 0 and job_growth < -0.03:
+            outlook = "concerning"
+        else:
+            outlook = "stable"
+        
+        # Generate the summary text
+        summary = f"The overall career outlook is {outlook}. "
+        
+        # Add demand growth description
+        if demand_growth > 0.05:
+            summary += "Demand for professionals in this field is growing rapidly. "
+        elif demand_growth > 0.02:
+            summary += "Demand for professionals in this field is growing steadily. "
+        elif demand_growth > 0:
+            summary += "Demand for professionals in this field is increasing slightly. "
+        elif demand_growth < -0.02:
+            summary += "Demand for professionals in this field is declining. "
+        else:
+            summary += "Demand for professionals in this field is relatively stable. "
+        
+        # Add salary growth description
+        if salary_growth > 0.04:
+            summary += "Salaries are increasing at an above-average rate. "
+        elif salary_growth > 0.02:
+            summary += "Salaries are growing at around the average inflation rate. "
+        elif salary_growth > 0:
+            summary += "Salaries are increasing slightly. "
+        elif salary_growth < 0:
+            summary += "Salaries have seen slight decreases. "
+        else:
+            summary += "Salaries have remained stable. "
+        
+        # Add job posting growth description
+        if job_growth > 0.1:
+            summary += "The number of job postings has increased significantly, indicating strong market demand."
+        elif job_growth > 0.05:
+            summary += "The number of job postings has increased steadily, suggesting good employment opportunities."
+        elif job_growth > 0:
+            summary += "The number of job postings has seen modest growth."
+        elif job_growth < -0.05:
+            summary += "The number of job postings has decreased, which may indicate a more competitive job market."
+        else:
+            summary += "The number of job postings has remained relatively constant."
+        
+        return summary
+    
+    def save_model(self, filepath='career_recommendation_model.pkl'):
+        """Save the model to a file."""
+        try:
+            model_data = {
+                'vectorizer': self.vectorizer,
+                'career_vectors': self.career_vectors,
+                'career_titles': self.career_titles
+            }
+            
             with open(filepath, 'wb') as f:
                 pickle.dump(model_data, f)
+                
             logger.info(f"Model saved to {filepath}")
             return True
         except Exception as e:
             logger.error(f"Error saving model: {e}")
             return False
-            
+    
     def load_model(self, filepath='career_recommendation_model.pkl'):
         """Load the model from a file."""
-        from models import Career
-        
         try:
             with open(filepath, 'rb') as f:
                 model_data = pickle.load(f)
                 
             self.vectorizer = model_data['vectorizer']
             self.career_vectors = model_data['career_vectors']
-            
-            # Load careers by IDs
-            career_ids = model_data['career_ids']
-            self.careers = [Career.query.get(id) for id in career_ids]
+            self.career_titles = model_data['career_titles']
             
             logger.info(f"Model loaded from {filepath}")
             return True
-        except FileNotFoundError:
-            logger.warning(f"Model file {filepath} not found")
-            return False
         except Exception as e:
             logger.error(f"Error loading model: {e}")
             return False

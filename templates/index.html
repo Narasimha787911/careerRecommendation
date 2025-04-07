@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+
+{% block title %}Home - AI Career Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row align-items-center py-5">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4">Find Your Perfect Career Path</h1>
+        <p class="lead mb-4">Our AI-powered career recommendation system analyzes your skills, interests, and market trends to suggest career paths that match your unique profile.</p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('assessment') }}" class="btn btn-primary btn-lg px-4 me-md-2">Take Assessment</a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-lg px-4">View Dashboard</a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">Get Started</a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+        <div class="text-center">
+            <img src="{{ url_for('static', filename='img/career-illustration.svg') }}" alt="Career Recommendation" class="img-fluid" style="max-height: 400px;">
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 pt-5 border-top">
+    <div class="col-12 text-center">
+        <h2 class="mb-4">How It Works</h2>
+    </div>
+</div>
+
+<div class="row mb-5 g-4">
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <i class="fas fa-user-edit text-primary fa-2x"></i>
+                </div>
+                <h5 class="card-title">Create Your Profile</h5>
+                <p class="card-text">Enter your skills, education, and preferences to build your personalized profile.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <i class="fas fa-clipboard-list text-success fa-2x"></i>
+                </div>
+                <h5 class="card-title">Take Assessment</h5>
+                <p class="card-text">Complete our comprehensive assessment to help our AI understand your strengths and interests.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle bg-info bg-opacity-10 p-3 d-inline-flex mb-3">
+                    <i class="fas fa-chart-line text-info fa-2x"></i>
+                </div>
+                <h5 class="card-title">Get Recommendations</h5>
+                <p class="card-text">Receive personalized career recommendations with detailed market trend analysis.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 py-5 bg-dark bg-opacity-10 rounded-3">
+    <div class="col-md-6 px-4">
+        <h2 class="mb-4">Why Choose Our AI Career Recommendation System?</h2>
+        <ul class="list-group list-group-flush bg-transparent">
+            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i> Personalized recommendations based on your unique profile</li>
+            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i> Up-to-date market trend analysis and career outlook</li>
+            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i> Detailed skill gap analysis and learning recommendations</li>
+            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i> Advanced AI algorithms for precise matching</li>
+            <li class="list-group-item bg-transparent"><i class="fas fa-check-circle text-success me-2"></i> Regular updates based on changing job market conditions</li>
+        </ul>
+    </div>
+    <div class="col-md-6 px-4">
+        <h2 class="mb-4">Features</h2>
+        <div class="d-flex mb-3">
+            <div class="flex-shrink-0">
+                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex">
+                    <i class="fas fa-brain text-primary"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h5>AI-Powered Analysis</h5>
+                <p class="text-muted">Our sophisticated AI engine analyzes multiple factors to provide accurate recommendations.</p>
+            </div>
+        </div>
+        <div class="d-flex mb-3">
+            <div class="flex-shrink-0">
+                <div class="rounded-circle bg-warning bg-opacity-10 p-3 d-inline-flex">
+                    <i class="fas fa-chart-pie text-warning"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h5>Market Trend Insights</h5>
+                <p class="text-muted">Stay informed about job market trends and career growth opportunities.</p>
+            </div>
+        </div>
+        <div class="d-flex">
+            <div class="flex-shrink-0">
+                <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex">
+                    <i class="fas fa-graduation-cap text-success"></i>
+                </div>
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h5>Skill Development Guidance</h5>
+                <p class="text-muted">Get recommendations on skills to develop to enhance your career prospects.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5 pt-5 text-center">
+    <div class="col-12">
+        <h2 class="mb-5">Ready to find your perfect career?</h2>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('assessment') }}" class="btn btn-primary btn-lg px-5">Take Assessment Now</a>
+        {% else %}
+            <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-5">Get Started Now</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

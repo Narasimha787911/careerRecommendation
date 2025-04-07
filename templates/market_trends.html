@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+
+{% block title %}Market Trends for {{ career.title }} - AI Career Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-info text-white py-3">
+                <h3 class="mb-0">Market Trends: {{ career.title }}</h3>
+            </div>
+            <div class="card-body p-4">
+                {% if 'error' in trend_analysis %}
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>{{ trend_analysis.error }}
+                    </div>
+                {% else %}
+                    <p class="lead mb-4">Based on data from the past {{ trend_analysis.years_analyzed }} years, here's an analysis of market trends for {{ career.title }}:</p>
+                    
+                    <div class="alert alert-info mb-4">
+                        <h5><i class="fas fa-chart-line me-2"></i>Market Outlook Summary</h5>
+                        <p class="mb-0">{{ trend_analysis.outlook_summary }}</p>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4 text-center">
+                                    <div class="display-6 text-primary mb-3">{{ (trend_analysis.demand_growth * 100)|round(1) }}%</div>
+                                    <h5>Annual Demand Growth</h5>
+                                    <p class="text-muted">
+                                        {% if trend_analysis.demand_growth > 0.05 %}
+                                            <span class="text-success"><i class="fas fa-arrow-up me-1"></i>Strong Growth</span>
+                                        {% elif trend_analysis.demand_growth > 0 %}
+                                            <span class="text-success"><i class="fas fa-arrow-up me-1"></i>Positive Growth</span>
+                                        {% elif trend_analysis.demand_growth == 0 %}
+                                            <span class="text-secondary"><i class="fas fa-minus me-1"></i>Stable</span>
+                                        {% else %}
+                                            <span class="text-danger"><i class="fas fa-arrow-down me-1"></i>Declining</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-4 mb-md-0">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4 text-center">
+                                    <div class="display-6 text-success mb-3">{{ (trend_analysis.salary_growth * 100)|round(1) }}%</div>
+                                    <h5>Average Salary Growth</h5>
+                                    <p class="text-muted">
+                                        {% if trend_analysis.salary_growth > 0.03 %}
+                                            <span class="text-success"><i class="fas fa-arrow-up me-1"></i>Above Average</span>
+                                        {% elif trend_analysis.salary_growth > 0 %}
+                                            <span class="text-success"><i class="fas fa-arrow-up me-1"></i>Positive Growth</span>
+                                        {% elif trend_analysis.salary_growth == 0 %}
+                                            <span class="text-secondary"><i class="fas fa-minus me-1"></i>Stable</span>
+                                        {% else %}
+                                            <span class="text-danger"><i class="fas fa-arrow-down me-1"></i>Declining</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm">
+                                <div class="card-body p-4 text-center">
+                                    <div class="display-6 text-info mb-3">{{ (trend_analysis.job_posting_growth * 100)|round(1) }}%</div>
+                                    <h5>Job Posting Growth</h5>
+                                    <p class="text-muted">
+                                        {% if trend_analysis.job_posting_growth > 0.1 %}
+                                            <span class="text-success"><i class="fas fa-arrow-up me-1"></i>High Growth</span>
+                                        {% elif trend_analysis.job_posting_growth > 0 %}
+                                            <span class="text-success"><i class="fas fa-arrow-up me-1"></i>Positive Growth</span>
+                                        {% elif trend_analysis.job_posting_growth == 0 %}
+                                            <span class="text-secondary"><i class="fas fa-minus me-1"></i>Stable</span>
+                                        {% else %}
+                                            <span class="text-danger"><i class="fas fa-arrow-down me-1"></i>Declining</span>
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-transparent">
+                            <h5 class="mb-0">Trend Analysis Chart</h5>
+                        </div>
+                        <div class="card-body">
+                            <img src="data:image/png;base64,{{ charts.combined_chart }}" alt="Trend Analysis Chart" class="img-fluid">
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-transparent">
+                            <h5 class="mb-0">Trend Data by Year</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Year</th>
+                                            <th>Demand Level</th>
+                                            <th>Salary Change</th>
+                                            <th>Job Postings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in range(trend_analysis.years|length) %}
+                                            <tr>
+                                                <td>{{ trend_analysis.years[i] }}</td>
+                                                <td>{{ (trend_analysis.demand_levels[i] * 100)|round(1) }}%</td>
+                                                <td>{{ (trend_analysis.salary_trends[i] * 100)|round(1) }}%</td>
+                                                <td>{{ trend_analysis.job_posting_counts[i]|format(',') }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-transparent">
+                            <h5 class="mb-0">What Does This Mean For You?</h5>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-4 mb-md-0">
+                                    <h6><i class="fas fa-lightbulb text-warning me-2"></i>Career Opportunities</h6>
+                                    <p>
+                                        {% if trend_analysis.job_posting_growth > 0.05 %}
+                                            With strong job posting growth of {{ (trend_analysis.job_posting_growth * 100)|round(1) }}%, you can expect abundant job opportunities in this field. This indicates employers are actively seeking talent with these skills.
+                                        {% elif trend_analysis.job_posting_growth > 0 %}
+                                            With positive job posting growth of {{ (trend_analysis.job_posting_growth * 100)|round(1) }}%, you can expect a reasonable number of job opportunities in this field.
+                                        {% else %}
+                                            With job posting growth of {{ (trend_analysis.job_posting_growth * 100)|round(1) }}%, you may face increased competition for positions in this field. Consider developing specialized skills to stand out.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6><i class="fas fa-money-bill-wave text-success me-2"></i>Salary Expectations</h6>
+                                    <p>
+                                        {% if trend_analysis.salary_growth > 0.03 %}
+                                            With above-average salary growth of {{ (trend_analysis.salary_growth * 100)|round(1) }}%, you can expect competitive compensation in this field. This suggests strong demand for skilled professionals.
+                                        {% elif trend_analysis.salary_growth > 0 %}
+                                            With positive salary growth of {{ (trend_analysis.salary_growth * 100)|round(1) }}%, you can expect reasonable compensation in this field that generally keeps pace with inflation.
+                                        {% else %}
+                                            With salary growth of {{ (trend_analysis.salary_growth * 100)|round(1) }}%, compensation in this field may not be growing as fast as other sectors. Consider negotiating based on your unique skills.
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="text-center mb-3">
+                    <a href="{{ url_for('career_details', career_id=career.id) }}" class="btn btn-outline-secondary me-2">Back to Career Details</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

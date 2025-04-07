@@ -1,0 +1,176 @@
+/* Custom styles for AI Career Recommendation System */
+
+/* General Styles */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+/* Card Hover Effect */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Recommendation Card Styling */
+.recommendation-card {
+    border-left: 5px solid var(--bs-primary);
+}
+
+.recommendation-card .match-score {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--bs-primary);
+}
+
+/* Assessment Form Styling */
+.assessment-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    background-color: rgba(var(--bs-dark-rgb), 0.05);
+}
+
+/* Profile Page Styling */
+.profile-header {
+    padding: 2rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(45deg, var(--bs-dark), var(--bs-secondary));
+    margin-bottom: 2rem;
+}
+
+.skill-badge {
+    margin: 0.25rem;
+    font-size: 0.9rem;
+}
+
+/* Career Details Page */
+.career-header {
+    padding: 2rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(45deg, var(--bs-primary), var(--bs-info));
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.trend-chart {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: rgba(var(--bs-dark-rgb), 0.05);
+    border-radius: 0.5rem;
+}
+
+/* Feedback Form */
+.rating-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.rating-container input {
+    display: none;
+}
+
+.rating-container label {
+    cursor: pointer;
+    padding: 5px;
+    font-size: 2rem;
+    color: var(--bs-secondary);
+}
+
+.rating-container label:hover,
+.rating-container label:hover ~ label,
+.rating-container input:checked ~ label {
+    color: var(--bs-warning);
+}
+
+/* Dashboard Styling */
+.dashboard-card {
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Animated elements */
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Custom tooltip */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.custom-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Match score indicator */
+.match-indicator {
+    width: 100%;
+    height: 8px;
+    background-color: var(--bs-secondary);
+    border-radius: 4px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.match-indicator .match-fill {
+    height: 100%;
+    background-color: var(--bs-primary);
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .career-header, .profile-header {
+        padding: 1.5rem;
+    }
+    
+    .dashboard-icon {
+        font-size: 2rem;
+    }
+}

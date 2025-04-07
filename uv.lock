@@ -717,6 +717,8 @@ dependencies = [
     { name = "routes" },
     { name = "scikit-learn" },
     { name = "seaborn" },
+    { name = "sqlalchemy" },
+    { name = "werkzeug" },
 ]
 
 [package.metadata]
@@ -732,6 +734,8 @@ requires-dist = [
     { name = "routes", specifier = ">=2.5.1" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
     { name = "seaborn", specifier = ">=0.13.2" },
+    { name = "sqlalchemy", specifier = ">=2.0.40" },
+    { name = "werkzeug", specifier = ">=3.1.3" },
 ]
 
 [[package]]

@@ -1,9 +1,9 @@
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from app import db
 
-# Association tables for many-to-many relationships
+# Association tables
 user_skill = db.Table('user_skill',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('skill_id', db.Integer, db.ForeignKey('skill.id'), primary_key=True)
@@ -35,7 +35,7 @@ class User(UserMixin, db.Model):
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-        
+    
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
@@ -82,7 +82,7 @@ class Assessment(db.Model):
     recommendations = db.relationship('Recommendation', backref='assessment', lazy='dynamic')
     
     def __repr__(self):
-        return f'<Assessment for User {self.user_id} on {self.date_taken}>'
+        return f'<Assessment {self.id} for User {self.user_id}>'
 
 class Recommendation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -92,11 +92,11 @@ class Recommendation(db.Model):
     reasoning = db.Column(db.Text)  # Explanation for the recommendation
     date_generated = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relationship
+    # Relationships
     career = db.relationship('Career')
     
     def __repr__(self):
-        return f'<Recommendation for Assessment {self.assessment_id}, Career {self.career_id}>'
+        return f'<Recommendation {self.id} for Assessment {self.assessment_id}>'
 
 class UserPreference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -132,8 +132,8 @@ class Feedback(db.Model):
     comments = db.Column(db.Text)
     submitted_at = db.Column(db.DateTime, default=datetime.utcnow)
     
-    # Relationship
+    # Relationships
     recommendation = db.relationship('Recommendation')
     
     def __repr__(self):
-        return f'<Feedback from User {self.user_id} on Recommendation {self.recommendation_id}>'
+        return f'<Feedback {self.id} from User {self.user_id}>'

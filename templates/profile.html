@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}Profile - AI Career Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="profile-header text-white">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <div class="display-4 mb-0"><i class="fas fa-user-circle"></i></div>
+                </div>
+                <div class="col-md-10">
+                    <h2 class="mb-1">{{ user.first_name }} {{ user.last_name }}</h2>
+                    <p class="mb-1">{{ user.username }} | {{ user.email }}</p>
+                    <p class="mb-0"><i class="fas fa-graduation-cap me-2"></i>{{ user.education_level or 'Education not specified' }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-transparent py-3">
+                <h4 class="mb-0">Edit Profile</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="post" action="{{ url_for('profile') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name or '' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name or '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="date_of_birth" class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth" value="{{ user.date_of_birth.strftime('%Y-%m-%d') if user.date_of_birth else '' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="education_level" class="form-label">Education Level</label>
+                        <select class="form-select" id="education_level" name="education_level">
+                            <option value="">Select Education Level</option>
+                            <option value="High School" {% if user.education_level == 'High School' %}selected{% endif %}>High School</option>
+                            <option value="Associate's Degree" {% if user.education_level == 'Associate\'s Degree' %}selected{% endif %}>Associate's Degree</option>
+                            <option value="Bachelor's Degree" {% if user.education_level == 'Bachelor\'s Degree' %}selected{% endif %}>Bachelor's Degree</option>
+                            <option value="Master's Degree" {% if user.education_level == 'Master\'s Degree' %}selected{% endif %}>Master's Degree</option>
+                            <option value="PhD or Doctorate" {% if user.education_level == 'PhD or Doctorate' %}selected{% endif %}>PhD or Doctorate</option>
+                            <option value="Trade School" {% if user.education_level == 'Trade School' %}selected{% endif %}>Trade School</option>
+                            <option value="Other" {% if user.education_level == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">Bio</label>
+                        <textarea class="form-control" id="bio" name="bio" rows="4" placeholder="Tell us about yourself, your background, and your career goals">{{ user.bio or '' }}</textarea>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Skills</h5>
+                    <div class="mb-3">
+                        <label for="skills" class="form-label">Select your skills</label>
+                        <select class="form-select" id="skills" name="skills" multiple size="8">
+                            {% for skill in all_skills %}
+                                <option value="{{ skill.id }}" {% if skill in user_skills %}selected{% endif %}>{{ skill.name }} ({{ skill.category }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text">Hold Ctrl (or Cmd on Mac) to select multiple skills</div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3">Career Preferences</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="salary_preference" class="form-label">Salary Range Preference</label>
+                            <select class="form-select" id="salary_preference" name="salary_preference">
+                                <option value="">Select Salary Range</option>
+                                <option value="0-50000" {% if preferences.salary_preference == '0-50000' %}selected{% endif %}>Less than $50,000</option>
+                                <option value="50000-75000" {% if preferences.salary_preference == '50000-75000' %}selected{% endif %}>$50,000 - $75,000</option>
+                                <option value="75000-100000" {% if preferences.salary_preference == '75000-100000' %}selected{% endif %}>$75,000 - $100,000</option>
+                                <option value="100000-150000" {% if preferences.salary_preference == '100000-150000' %}selected{% endif %}>$100,000 - $150,000</option>
+                                <option value="150000+" {% if preferences.salary_preference == '150000+' %}selected{% endif %}>More than $150,000</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="location_preference" class="form-label">Location Preference</label>
+                            <input type="text" class="form-control" id="location_preference" name="location_preference" placeholder="City, State, or Region" value="{{ preferences.location_preference or '' }}">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remote_work" name="remote_work" {% if preferences.remote_work %}checked{% endif %}>
+                        <label class="form-check-label" for="remote_work">I prefer remote work opportunities</label>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="work_life_balance" class="form-label">Work-Life Balance Importance (1-10)</label>
+                            <input type="range" class="form-range" min="1" max="10" id="work_life_balance" name="work_life_balance" value="{{ preferences.work_life_balance or 5 }}">
+                            <div class="d-flex justify-content-between">
+                                <span class="small">Less Important</span>
+                                <span class="small">Very Important</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="job_security" class="form-label">Job Security Importance (1-10)</label>
+                            <input type="range" class="form-range" min="1" max="10" id="job_security" name="job_security" value="{{ preferences.job_security or 5 }}">
+                            <div class="d-flex justify-content-between">
+                                <span class="small">Less Important</span>
+                                <span class="small">Very Important</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="growth_opportunity" class="form-label">Growth Opportunity Importance (1-10)</label>
+                            <input type="range" class="form-range" min="1" max="10" id="growth_opportunity" name="growth_opportunity" value="{{ preferences.growth_opportunity or 5 }}">
+                            <div class="d-flex justify-content-between">
+                                <span class="small">Less Important</span>
+                                <span class="small">Very Important</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

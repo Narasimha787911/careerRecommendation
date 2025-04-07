@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}Career Assessment - AI Career Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-success text-white py-3">
+                <h3 class="mb-0">Career Assessment</h3>
+            </div>
+            <div class="card-body p-4">
+                <p class="lead mb-4">Complete this assessment to receive personalized career recommendations based on your skills, interests, and preferences.</p>
+                
+                <form id="assessment-form" method="post" action="{{ url_for('assessment') }}">
+                    <div class="assessment-section">
+                        <h4 class="mb-3">Personality Traits</h4>
+                        <p class="text-muted mb-3">Describe your personality traits (e.g., analytical, creative, detail-oriented, people-oriented, etc.)</p>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="personality_traits" name="personality_traits" rows="4" placeholder="Example: I am an analytical person who enjoys problem-solving. I'm detail-oriented and thorough in my work. I'm also creative and enjoy coming up with innovative solutions." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="assessment-section">
+                        <h4 class="mb-3">Interests</h4>
+                        <p class="text-muted mb-3">What topics, activities, or fields interest you the most?</p>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="interests" name="interests" rows="4" placeholder="Example: I'm interested in technology, particularly artificial intelligence and data analysis. I enjoy reading about scientific breakthroughs and technological innovations. I also have an interest in design and visual aesthetics." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="assessment-section">
+                        <h4 class="mb-3">Strengths</h4>
+                        <p class="text-muted mb-3">What do you consider to be your key strengths or abilities?</p>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="strengths" name="strengths" rows="4" placeholder="Example: I excel at analyzing complex data and finding patterns. I'm good at organizing information and creating efficient systems. I'm a quick learner and adapt well to new tools and technologies." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="assessment-section">
+                        <h4 class="mb-3">Areas for Improvement</h4>
+                        <p class="text-muted mb-3">What areas would you like to improve or develop further?</p>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="weaknesses" name="weaknesses" rows="4" placeholder="Example: I sometimes struggle with public speaking and presenting to large groups. I'd like to improve my leadership skills and become more comfortable taking initiative in group settings. I could also benefit from enhancing my time management skills." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">Submit Assessment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

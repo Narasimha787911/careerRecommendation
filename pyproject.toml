@@ -15,4 +15,6 @@ dependencies = [
     "routes>=2.5.1",
     "scikit-learn>=1.6.1",
     "seaborn>=0.13.2",
+    "sqlalchemy>=2.0.40",
+    "werkzeug>=3.1.3",
 ]

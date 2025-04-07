@@ -1,0 +1,204 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard - AI Career Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="mb-4">Welcome, {{ current_user.first_name or current_user.username }}!</h1>
+                
+                <div class="row mb-4">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card dashboard-card h-100 border-0 shadow-sm bg-primary bg-opacity-10">
+                            <div class="card-body text-center p-4">
+                                <div class="dashboard-icon text-primary">
+                                    <i class="fas fa-user-cog"></i>
+                                </div>
+                                <h5 class="card-title">Profile Completion</h5>
+                                {% set profile_completion = 0 %}
+                                {% if current_user.first_name and current_user.last_name %}
+                                    {% set profile_completion = profile_completion + 25 %}
+                                {% endif %}
+                                {% if current_user.bio %}
+                                    {% set profile_completion = profile_completion + 25 %}
+                                {% endif %}
+                                {% if current_user.education_level %}
+                                    {% set profile_completion = profile_completion + 25 %}
+                                {% endif %}
+                                {% if current_user.skills|length > 0 %}
+                                    {% set profile_completion = profile_completion + 25 %}
+                                {% endif %}
+                                <div class="progress my-3" style="height: 10px;">
+                                    <div class="progress-bar" role="progressbar" style="width: {{ profile_completion }}%;" aria-valuenow="{{ profile_completion }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="mb-0">{{ profile_completion }}% complete</p>
+                                <a href="{{ url_for('profile') }}" class="btn btn-sm btn-primary mt-3">Update Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <div class="card dashboard-card h-100 border-0 shadow-sm bg-success bg-opacity-10">
+                            <div class="card-body text-center p-4">
+                                <div class="dashboard-icon text-success">
+                                    <i class="fas fa-clipboard-list"></i>
+                                </div>
+                                <h5 class="card-title">Career Assessment</h5>
+                                {% if assessment %}
+                                    <p>Last assessment taken on {{ assessment.date_taken.strftime('%B %d, %Y') }}</p>
+                                    <a href="{{ url_for('recommendations', assessment_id=assessment.id) }}" class="btn btn-sm btn-success mt-3">View Recommendations</a>
+                                {% else %}
+                                    <p>You haven't taken an assessment yet.</p>
+                                    <a href="{{ url_for('assessment') }}" class="btn btn-sm btn-success mt-3">Take Assessment</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card dashboard-card h-100 border-0 shadow-sm bg-info bg-opacity-10">
+                            <div class="card-body text-center p-4">
+                                <div class="dashboard-icon text-info">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+                                <h5 class="card-title">Career Trends</h5>
+                                <p>Analyze market trends for different career paths.</p>
+                                {% if recommendations %}
+                                    <a href="{{ url_for('market_trends', career_id=recommendations[0].career_id) }}" class="btn btn-sm btn-info mt-3">View Trends</a>
+                                {% else %}
+                                    <p class="text-muted small">Complete an assessment to unlock trends.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recommendations %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent py-3">
+                <h4 class="mb-0">Your Top Career Recommendations</h4>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Career</th>
+                                <th>Match Score</th>
+                                <th>Avg. Salary</th>
+                                <th>Growth Rate</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for recommendation in recommendations[:3] %}
+                                <tr>
+                                    <td>{{ recommendation.career.title }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <span class="me-2">{{ (recommendation.match_score * 100)|int }}%</span>
+                                            <div class="match-indicator" data-score="{{ recommendation.match_score }}">
+                                                <div class="match-fill"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>${{ recommendation.career.avg_salary|int|format(',') }}</td>
+                                    <td>{{ recommendation.career.growth_rate }}%</td>
+                                    <td>
+                                        <a href="{{ url_for('career_details', career_id=recommendation.career.id) }}" class="btn btn-sm btn-outline-primary">Details</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer bg-transparent text-center py-3">
+                    <a href="{{ url_for('recommendations', assessment_id=assessment.id) }}" class="btn btn-primary">View All Recommendations</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4 text-center">
+                <div class="py-5">
+                    <i class="fas fa-clipboard-list fa-4x text-muted mb-4"></i>
+                    <h3>No Recommendations Yet</h3>
+                    <p class="lead">Take a career assessment to get personalized career recommendations.</p>
+                    <a href="{{ url_for('assessment') }}" class="btn btn-primary mt-3">Start Assessment</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-transparent py-3">
+                <h4 class="mb-0">Next Steps</h4>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-flex">
+                                    <i class="fas fa-user-edit text-primary"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Complete Your Profile</h5>
+                                <p class="text-muted mb-1">Add your skills, education, and preferences.</p>
+                                <a href="{{ url_for('profile') }}" class="btn btn-sm btn-outline-primary">Update Profile</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-flex">
+                                    <i class="fas fa-clipboard-list text-success"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Take an Assessment</h5>
+                                <p class="text-muted mb-1">Get personalized career recommendations.</p>
+                                <a href="{{ url_for('assessment') }}" class="btn btn-sm btn-outline-success">Start Assessment</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle bg-info bg-opacity-10 p-3 d-inline-flex">
+                                    <i class="fas fa-chart-line text-info"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5>Explore Market Trends</h5>
+                                <p class="text-muted mb-1">View salary trends and job growth data.</p>
+                                {% if recommendations %}
+                                    <a href="{{ url_for('market_trends', career_id=recommendations[0].career_id) }}" class="btn btn-sm btn-outline-info">View Trends</a>
+                                {% else %}
+                                    <button class="btn btn-sm btn-outline-info" disabled>Complete Assessment First</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
