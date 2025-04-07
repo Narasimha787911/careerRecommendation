@@ -7,49 +7,49 @@ from sqlalchemy.orm import DeclarativeBase
 from flask_login import LoginManager
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-# Configure logging
+# Set up logging
 logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
-# Define base model class
 class Base(DeclarativeBase):
     pass
 
-# Initialize extensions
+# Initialize SQLAlchemy with the Base class
 db = SQLAlchemy(model_class=Base)
-login_manager = LoginManager()
 
-# Create and configure app
+# Create the Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "default_secret_key_for_development")
-app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)  # needed for url_for to generate with https
-app.debug = True  # Enable debug mode
 
-# Configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:///career_recommendation.db")
+# Set secret key
+app.secret_key = os.environ.get("SESSION_SECRET", "career_recommendation_secret_key")
+
+# Configure ProxyFix middleware for proper URL generation
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+
+# Configure database connection
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
 }
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-# Initialize extensions with app
+# Initialize the app with the SQLAlchemy extension
 db.init_app(app)
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-login_manager.login_message_category = 'info'
 
-# Import models
+# Set up login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+login_manager.login_message = "Please log in to access this page."
+
+from models import User
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
 with app.app_context():
-    # Make sure to import the models here
-    import models
+    # Import models
+    import models  # noqa: F401
     
-    # Create tables
+    # Create all database tables
     db.create_all()
-    
-    # Register user loader for Flask-Login
-    from models import User
-    
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
