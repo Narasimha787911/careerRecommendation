@@ -1,0 +1,216 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h2 class="h4 m-0 font-weight-bold text-primary">Career Assessment</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    This assessment helps our AI engine understand your preferences better. It will take about 5-10 minutes to complete.
+                </div>
+                
+                <form id="assessment-form" method="POST" action="{{ url_for('process_assessment') }}" class="needs-validation" novalidate>
+                    <!-- Additional Skills Section -->
+                    <div class="assessment-section mb-4">
+                        <h3 class="h5 mb-3">Additional Skills</h3>
+                        <p class="mb-3">Select any additional skills you have that weren't included in your profile:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Project Management" id="skill1">
+                                    <label class="form-check-label" for="skill1">Project Management</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Data Analysis" id="skill2">
+                                    <label class="form-check-label" for="skill2">Data Analysis</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Public Speaking" id="skill3">
+                                    <label class="form-check-label" for="skill3">Public Speaking</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Graphic Design" id="skill4">
+                                    <label class="form-check-label" for="skill4">Graphic Design</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Content Writing" id="skill5">
+                                    <label class="form-check-label" for="skill5">Content Writing</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Leadership" id="skill6">
+                                    <label class="form-check-label" for="skill6">Leadership</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Sales" id="skill7">
+                                    <label class="form-check-label" for="skill7">Sales</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Customer Service" id="skill8">
+                                    <label class="form-check-label" for="skill8">Customer Service</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_skills" value="Research" id="skill9">
+                                    <label class="form-check-label" for="skill9">Research</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Preferred Industries Section -->
+                    <div class="assessment-section mb-4">
+                        <h3 class="h5 mb-3">Preferred Industries</h3>
+                        <p class="mb-3">Select industries you are interested in working in:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Technology" id="industry1">
+                                    <label class="form-check-label" for="industry1">Technology</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Healthcare" id="industry2">
+                                    <label class="form-check-label" for="industry2">Healthcare</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Finance" id="industry3">
+                                    <label class="form-check-label" for="industry3">Finance</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Education" id="industry4">
+                                    <label class="form-check-label" for="industry4">Education</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Marketing" id="industry5">
+                                    <label class="form-check-label" for="industry5">Marketing</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Consulting" id="industry6">
+                                    <label class="form-check-label" for="industry6">Consulting</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Retail" id="industry7">
+                                    <label class="form-check-label" for="industry7">Retail</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Manufacturing" id="industry8">
+                                    <label class="form-check-label" for="industry8">Manufacturing</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="preferred_industries" value="Government" id="industry9">
+                                    <label class="form-check-label" for="industry9">Government</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Work Values Section -->
+                    <div class="assessment-section mb-4">
+                        <h3 class="h5 mb-3">Work Values</h3>
+                        <p class="mb-3">Select values that are important to you in a workplace:</p>
+                        
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Work-Life Balance" id="value1">
+                                    <label class="form-check-label" for="value1">Work-Life Balance</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="High Salary" id="value2">
+                                    <label class="form-check-label" for="value2">High Salary</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Job Security" id="value3">
+                                    <label class="form-check-label" for="value3">Job Security</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Creative Freedom" id="value4">
+                                    <label class="form-check-label" for="value4">Creative Freedom</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Remote Work" id="value5">
+                                    <label class="form-check-label" for="value5">Remote Work</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Career Growth" id="value6">
+                                    <label class="form-check-label" for="value6">Career Growth</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Team Collaboration" id="value7">
+                                    <label class="form-check-label" for="value7">Team Collaboration</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Social Impact" id="value8">
+                                    <label class="form-check-label" for="value8">Social Impact</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="work_values" value="Learning Opportunities" id="value9">
+                                    <label class="form-check-label" for="value9">Learning Opportunities</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-robot me-2"></i> Generate Recommendations
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

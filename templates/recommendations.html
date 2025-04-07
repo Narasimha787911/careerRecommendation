@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h2 class="h4 m-0 font-weight-bold text-primary">Your Career Recommendations</h2>
+                <div>
+                    <a href="{{ url_for('assessment') }}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-sync-alt me-1"></i> Retake Assessment
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if recommendations %}
+                    <!-- Visualization Section -->
+                    <div class="mb-4">
+                        <h3 class="h5 mb-3">Top Career Matches</h3>
+                        <div class="chart-container" style="position: relative; height: 300px;">
+                            <canvas id="careerComparisonChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        {% for rec in recommendations %}
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100 recommendation-card {% if rec.score >= 70 %}high-match{% elif rec.score >= 40 %}medium-match{% else %}low-match{% endif %}">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h3 class="h5 mb-0">{{ rec.career.name }}</h3>
+                                            <span class="badge {% if rec.score >= 70 %}bg-success{% elif rec.score >= 40 %}bg-warning{% else %}bg-danger{% endif %}">
+                                                {{ rec.score }}% Match
+                                            </span>
+                                        </div>
+                                        
+                                        <p class="mb-3">{{ rec.career.description|truncate(150) }}</p>
+                                        
+                                        <div class="mb-3">
+                                            <div class="small text-muted mb-1">Match Score</div>
+                                            <div class="score-indicator">
+                                                <div class="score-bar" data-score="{{ rec.score }}"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mb-3">
+                                            <div class="small text-muted mb-1">Top Skills Required</div>
+                                            <div>
+                                                {% for skill in rec.career.get_required_skills()[:3] %}
+                                                    <span class="skill-tag">{{ skill }}</span>
+                                                {% endfor %}
+                                                {% if rec.career.get_required_skills()|length > 3 %}
+                                                    <span class="small text-muted">+{{ rec.career.get_required_skills()|length - 3 }} more</span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                        
+                                        {% if rec.market_trend %}
+                                            <div class="small text-muted mb-1">Market Demand</div>
+                                            <div class="progress mb-3" style="height: 10px;">
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: {{ rec.market_trend.demand_level * 100 }}%"></div>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        <div class="d-grid">
+                                            <a href="{{ url_for('career_details', career_id=rec.career.id) }}" class="btn btn-outline-primary">
+                                                View Details
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer small text-muted">
+                                        Recommended on {{ rec.date_time.strftime('%B %d, %Y') }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        <i class="fas fa-info-circle me-2"></i>
+                        No recommendations found. Please complete the <a href="{{ url_for('assessment') }}">career assessment</a> to get personalized recommendations.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if recommendations %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Extract career names and scores
+        const careers = [
+            {% for rec in recommendations[:5] %}
+                "{{ rec.career.name }}",
+            {% endfor %}
+        ];
+        
+        const scores = [
+            {% for rec in recommendations[:5] %}
+                {{ rec.score }},
+            {% endfor %}
+        ];
+        
+        // Create career comparison chart
+        createCareerComparisonChart('careerComparisonChart', careers, scores);
+    });
+</script>
+{% endif %}
+{% endblock %}

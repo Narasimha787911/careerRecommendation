@@ -1,0 +1,147 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <!-- Hero Section -->
+        <div class="card shadow mb-4">
+            <div class="card-body p-5 text-center">
+                <h1 class="display-4 mb-4">Discover Your Ideal Career Path</h1>
+                <p class="lead mb-4">Our AI-powered recommendation system analyzes your skills, interests, and qualifications to suggest the best career options for you.</p>
+                
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-4">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-4 gap-3">Go to Dashboard</a>
+                        <a href="{{ url_for('assessment') }}" class="btn btn-outline-secondary btn-lg px-4">Take Assessment</a>
+                    {% else %}
+                        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 gap-3">Get Started</a>
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Login</a>
+                    {% endif %}
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-left-primary">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-graduate fa-3x mb-3 text-primary"></i>
+                                <h3 class="h4 mb-3">Personalized Recommendations</h3>
+                                <p class="mb-0">Based on your unique profile, our AI suggests careers that match your skills and interests.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-left-success">
+                            <div class="card-body text-center">
+                                <i class="fas fa-chart-line fa-3x mb-3 text-success"></i>
+                                <h3 class="h4 mb-3">Market Trend Analysis</h3>
+                                <p class="mb-0">Stay informed about demand and salary trends in various career fields.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 border-left-info">
+                            <div class="card-body text-center">
+                                <i class="fas fa-lightbulb fa-3x mb-3 text-info"></i>
+                                <h3 class="h4 mb-3">Skill Gap Insights</h3>
+                                <p class="mb-0">Identify skills you need to develop to excel in your chosen career path.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="h4 m-0 font-weight-bold text-primary">How It Works</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 text-center mb-4 mb-lg-0">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                            <i class="fas fa-user-plus fa-2x"></i>
+                        </div>
+                        <h3 class="h5 mt-3">Create Profile</h3>
+                        <p class="small">Sign up and provide details about your education, skills, and interests.</p>
+                    </div>
+                    <div class="col-lg-3 text-center mb-4 mb-lg-0">
+                        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                            <i class="fas fa-clipboard-list fa-2x"></i>
+                        </div>
+                        <h3 class="h5 mt-3">Take Assessment</h3>
+                        <p class="small">Complete a comprehensive assessment to help our AI understand your preferences.</p>
+                    </div>
+                    <div class="col-lg-3 text-center mb-4 mb-lg-0">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                            <i class="fas fa-robot fa-2x"></i>
+                        </div>
+                        <h3 class="h5 mt-3">AI Analysis</h3>
+                        <p class="small">Our AI engine analyzes your profile against current job market demands.</p>
+                    </div>
+                    <div class="col-lg-3 text-center">
+                        <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px;">
+                            <i class="fas fa-briefcase fa-2x"></i>
+                        </div>
+                        <h3 class="h5 mt-3">Get Recommendations</h3>
+                        <p class="small">Receive personalized career recommendations with detailed insights.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h2 class="h4 m-0 font-weight-bold text-primary">Success Stories</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="small text-muted mb-2">Recent Graduate</div>
+                                <p class="card-text">"I was unsure which career path to take after graduation. The AI recommendations helped me discover data science as a perfect match for my skills and interests. Now I'm working in a field I love!"</p>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="ms-2">
+                                        <div>Alex T.</div>
+                                        <div class="small text-muted">Data Scientist</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="small text-muted mb-2">Career Changer</div>
+                                <p class="card-text">"After 5 years in retail, I wanted a change. This system analyzed my transferable skills and recommended digital marketing. The transition guidance was incredibly helpful for my successful career switch."</p>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="ms-2">
+                                        <div>Michelle K.</div>
+                                        <div class="small text-muted">Marketing Specialist</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="small text-muted mb-2">Professional</div>
+                                <p class="card-text">"I was at a crossroads in my career. The recommendation system identified skills I already had that were valuable in UX/UI design. The market trends data helped me negotiate a competitive salary."</p>
+                                <div class="d-flex align-items-center mt-3">
+                                    <div class="ms-2">
+                                        <div>James R.</div>
+                                        <div class="small text-muted">UX Designer</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

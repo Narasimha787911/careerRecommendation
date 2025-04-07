@@ -1,0 +1,283 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h2 class="h4 m-0 font-weight-bold text-primary">My Profile</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile') }}">
+                    <div class="row">
+                        <!-- Personal Information -->
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Personal Information</h3>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" value="{{ user.age }}" min="16" max="100">
+                            </div>
+                        </div>
+                        
+                        <!-- Skills -->
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Skills</h3>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="skill-input" placeholder="Add a skill...">
+                                <button class="btn btn-primary" type="button" id="add-skill-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div id="skills-list" class="mb-3">
+                                {% if skills %}
+                                    {% for skill in skills %}
+                                        <div class="skill-tag d-inline-flex align-items-center me-2 mb-2">
+                                            <span>{{ skill }}</span>
+                                            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove" style="font-size: 0.6rem;"></button>
+                                            <input type="hidden" name="skills" value="{{ skill }}">
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-text">Add your technical and soft skills</div>
+                        </div>
+                        
+                        <!-- Education -->
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Education</h3>
+                            <div class="mb-3">
+                                <label for="education_level" class="form-label">Highest Education Level</label>
+                                <select class="form-select" id="education_level" name="education_level">
+                                    <option value="" {% if not education.level %}selected{% endif %}>Select Level</option>
+                                    <option value="High School" {% if education.level == 'High School' %}selected{% endif %}>High School</option>
+                                    <option value="Associate's Degree" {% if education.level == 'Associate\'s Degree' %}selected{% endif %}>Associate's Degree</option>
+                                    <option value="Bachelor's Degree" {% if education.level == 'Bachelor\'s Degree' %}selected{% endif %}>Bachelor's Degree</option>
+                                    <option value="Master's Degree" {% if education.level == 'Master\'s Degree' %}selected{% endif %}>Master's Degree</option>
+                                    <option value="Doctorate" {% if education.level == 'Doctorate' %}selected{% endif %}>Doctorate</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="education_field" class="form-label">Field of Study</label>
+                                <input type="text" class="form-control" id="education_field" name="education_field" value="{{ education.field or '' }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="education_institution" class="form-label">Institution</label>
+                                <input type="text" class="form-control" id="education_institution" name="education_institution" value="{{ education.institution or '' }}">
+                            </div>
+                        </div>
+                        
+                        <!-- Experience -->
+                        <div class="col-md-6 mb-4">
+                            <h3 class="h5 mb-3">Work Experience</h3>
+                            <div class="mb-3">
+                                <label for="experience_years" class="form-label">Years of Experience</label>
+                                <select class="form-select" id="experience_years" name="experience_years">
+                                    <option value="" {% if not experience.years %}selected{% endif %}>Select Years</option>
+                                    <option value="0-1" {% if experience.years == '0-1' %}selected{% endif %}>0-1 years</option>
+                                    <option value="1-3" {% if experience.years == '1-3' %}selected{% endif %}>1-3 years</option>
+                                    <option value="3-5" {% if experience.years == '3-5' %}selected{% endif %}>3-5 years</option>
+                                    <option value="5-10" {% if experience.years == '5-10' %}selected{% endif %}>5-10 years</option>
+                                    <option value="10+" {% if experience.years == '10+' %}selected{% endif %}>10+ years</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Previous Roles</label>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" id="role-input" placeholder="Add a previous role...">
+                                    <button class="btn btn-primary" type="button" id="add-role-btn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <div id="roles-list" class="mb-3">
+                                    {% if experience.roles %}
+                                        {% for role in experience.roles %}
+                                            <div class="skill-tag d-inline-flex align-items-center me-2 mb-2">
+                                                <span>{{ role }}</span>
+                                                <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove" style="font-size: 0.6rem;"></button>
+                                                <input type="hidden" name="experience_roles" value="{{ role }}">
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Interests -->
+                        <div class="col-md-12 mb-4">
+                            <h3 class="h5 mb-3">Interests</h3>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="interest-input" placeholder="Add an interest...">
+                                <button class="btn btn-primary" type="button" id="add-interest-btn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <div id="interests-list" class="mb-3">
+                                {% if interests %}
+                                    {% for interest in interests %}
+                                        <div class="skill-tag d-inline-flex align-items-center me-2 mb-2">
+                                            <span>{{ interest }}</span>
+                                            <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove" style="font-size: 0.6rem;"></button>
+                                            <input type="hidden" name="interests" value="{{ interest }}">
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-text">Add your professional and personal interests</div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Role input functionality
+        const roleInput = document.getElementById('role-input');
+        const addRoleBtn = document.getElementById('add-role-btn');
+        const rolesList = document.getElementById('roles-list');
+        
+        if (addRoleBtn && roleInput && rolesList) {
+            addRoleBtn.addEventListener('click', function() {
+                const role = roleInput.value.trim();
+                if (role) {
+                    addRole(role);
+                    roleInput.value = '';
+                    roleInput.focus();
+                }
+            });
+            
+            roleInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addRoleBtn.click();
+                }
+            });
+            
+            // Set up existing role remove buttons
+            const existingRoleRemoveBtns = rolesList.querySelectorAll('.btn-close');
+            existingRoleRemoveBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    btn.parentElement.remove();
+                });
+            });
+        }
+        
+        function addRole(role) {
+            // Create role item
+            const roleItem = document.createElement('div');
+            roleItem.className = 'skill-tag d-inline-flex align-items-center me-2 mb-2';
+            
+            // Create role text
+            const roleText = document.createElement('span');
+            roleText.textContent = role;
+            
+            // Create remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'btn-close btn-close-white ms-2';
+            removeBtn.setAttribute('aria-label', 'Remove');
+            removeBtn.style.fontSize = '0.6rem';
+            
+            // Add event listener to remove button
+            removeBtn.addEventListener('click', function() {
+                roleItem.remove();
+            });
+            
+            // Create hidden input
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'experience_roles';
+            input.value = role;
+            
+            // Append elements
+            roleItem.appendChild(roleText);
+            roleItem.appendChild(removeBtn);
+            roleItem.appendChild(input);
+            rolesList.appendChild(roleItem);
+        }
+        
+        // Interest input functionality
+        const interestInput = document.getElementById('interest-input');
+        const addInterestBtn = document.getElementById('add-interest-btn');
+        const interestsList = document.getElementById('interests-list');
+        
+        if (addInterestBtn && interestInput && interestsList) {
+            addInterestBtn.addEventListener('click', function() {
+                const interest = interestInput.value.trim();
+                if (interest) {
+                    addInterest(interest);
+                    interestInput.value = '';
+                    interestInput.focus();
+                }
+            });
+            
+            interestInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addInterestBtn.click();
+                }
+            });
+            
+            // Set up existing interest remove buttons
+            const existingInterestRemoveBtns = interestsList.querySelectorAll('.btn-close');
+            existingInterestRemoveBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    btn.parentElement.remove();
+                });
+            });
+        }
+        
+        function addInterest(interest) {
+            // Create interest item
+            const interestItem = document.createElement('div');
+            interestItem.className = 'skill-tag d-inline-flex align-items-center me-2 mb-2';
+            
+            // Create interest text
+            const interestText = document.createElement('span');
+            interestText.textContent = interest;
+            
+            // Create remove button
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'btn-close btn-close-white ms-2';
+            removeBtn.setAttribute('aria-label', 'Remove');
+            removeBtn.style.fontSize = '0.6rem';
+            
+            // Add event listener to remove button
+            removeBtn.addEventListener('click', function() {
+                interestItem.remove();
+            });
+            
+            // Create hidden input
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'interests';
+            input.value = interest;
+            
+            // Append elements
+            interestItem.appendChild(interestText);
+            interestItem.appendChild(removeBtn);
+            interestItem.appendChild(input);
+            interestsList.appendChild(interestItem);
+        }
+        
+        // Set up existing skill remove buttons
+        const existingSkillRemoveBtns = document.querySelectorAll('#skills-list .btn-close');
+        existingSkillRemoveBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                btn.parentElement.remove();
+            });
+        });
+    });
+</script>
+{% endblock %}
