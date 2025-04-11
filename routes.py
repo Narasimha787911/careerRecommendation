@@ -28,13 +28,13 @@ def index():
 def register():
     """User registration route"""
     if request.method == 'POST':
-        username = request.form.get('username')
+        name = request.form.get('name')
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         
         # Validation
-        if not username or not email or not password:
+        if not name or not email or not password:
             flash('All fields are required', 'danger')
             return render_template('register.html')
             
@@ -43,13 +43,13 @@ def register():
             return render_template('register.html')
             
         # Check if user already exists
-        existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+        existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            flash('Username or email already exists', 'danger')
+            flash('Email already exists', 'danger')
             return render_template('register.html')
             
         # Create new user
-        new_user = User(username=username, email=email)
+        new_user = User(name=name, email=email)
         new_user.set_password(password)
         
         try:

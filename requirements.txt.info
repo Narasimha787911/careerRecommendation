@@ -1,0 +1,16 @@
+# Dependencies for the AI-Based Career Recommendation System
+# These are already installed via pyproject.toml, this file is for reference only
+
+flask
+flask-login
+flask-sqlalchemy
+flask-wtf
+matplotlib
+nltk
+numpy
+psycopg2-binary
+routes
+scikit-learn
+seaborn
+sqlalchemy
+werkzeug
