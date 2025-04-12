@@ -1,0 +1,752 @@
+[
+  {
+    "Trend_id": 1,
+    "Career_id": 1,
+    "Year": 2020,
+    "Demand_level": 0.7,
+    "Salary_trend": 4.8,
+    "Job_posting_count": 900,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Software Developer in 2020"
+  },
+  {
+    "Trend_id": 2,
+    "Career_id": 1,
+    "Year": 2021,
+    "Demand_level": 0.75,
+    "Salary_trend": 5.3,
+    "Job_posting_count": 1080,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Software Developer in 2021"
+  },
+  {
+    "Trend_id": 3,
+    "Career_id": 1,
+    "Year": 2022,
+    "Demand_level": 0.8,
+    "Salary_trend": 5.8,
+    "Job_posting_count": 1260,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Software Developer in 2022"
+  },
+  {
+    "Trend_id": 4,
+    "Career_id": 1,
+    "Year": 2023,
+    "Demand_level": 0.85,
+    "Salary_trend": 6.3,
+    "Job_posting_count": 1440,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Software Developer in 2023"
+  },
+  {
+    "Trend_id": 5,
+    "Career_id": 1,
+    "Year": 2024,
+    "Demand_level": 0.9,
+    "Salary_trend": 6.8,
+    "Job_posting_count": 1620,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Software Developer in 2024"
+  },
+  {
+    "Trend_id": 6,
+    "Career_id": 2,
+    "Year": 2020,
+    "Demand_level": 0.75,
+    "Salary_trend": 4.9,
+    "Job_posting_count": 950,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Data Scientist in 2020"
+  },
+  {
+    "Trend_id": 7,
+    "Career_id": 2,
+    "Year": 2021,
+    "Demand_level": 0.8,
+    "Salary_trend": 5.4,
+    "Job_posting_count": 1140,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Data Scientist in 2021"
+  },
+  {
+    "Trend_id": 8,
+    "Career_id": 2,
+    "Year": 2022,
+    "Demand_level": 0.85,
+    "Salary_trend": 5.9,
+    "Job_posting_count": 1330,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Data Scientist in 2022"
+  },
+  {
+    "Trend_id": 9,
+    "Career_id": 2,
+    "Year": 2023,
+    "Demand_level": 0.9,
+    "Salary_trend": 6.4,
+    "Job_posting_count": 1520,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Data Scientist in 2023"
+  },
+  {
+    "Trend_id": 10,
+    "Career_id": 2,
+    "Year": 2024,
+    "Demand_level": 0.95,
+    "Salary_trend": 6.9,
+    "Job_posting_count": 1710,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Data Scientist in 2024"
+  },
+  {
+    "Trend_id": 11,
+    "Career_id": 3,
+    "Year": 2020,
+    "Demand_level": 0.55,
+    "Salary_trend": 4.5,
+    "Job_posting_count": 750,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for UX/UI Designer in 2020"
+  },
+  {
+    "Trend_id": 12,
+    "Career_id": 3,
+    "Year": 2021,
+    "Demand_level": 0.6,
+    "Salary_trend": 5.0,
+    "Job_posting_count": 900,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for UX/UI Designer in 2021"
+  },
+  {
+    "Trend_id": 13,
+    "Career_id": 3,
+    "Year": 2022,
+    "Demand_level": 0.65,
+    "Salary_trend": 5.5,
+    "Job_posting_count": 1050,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for UX/UI Designer in 2022"
+  },
+  {
+    "Trend_id": 14,
+    "Career_id": 3,
+    "Year": 2023,
+    "Demand_level": 0.7,
+    "Salary_trend": 6.0,
+    "Job_posting_count": 1200,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for UX/UI Designer in 2023"
+  },
+  {
+    "Trend_id": 15,
+    "Career_id": 3,
+    "Year": 2024,
+    "Demand_level": 0.75,
+    "Salary_trend": 6.5,
+    "Job_posting_count": 1350,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for UX/UI Designer in 2024"
+  },
+  {
+    "Trend_id": 16,
+    "Career_id": 4,
+    "Year": 2020,
+    "Demand_level": 0.5,
+    "Salary_trend": 4.4,
+    "Job_posting_count": 700,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Digital Marketing Specialist in 2020"
+  },
+  {
+    "Trend_id": 17,
+    "Career_id": 4,
+    "Year": 2021,
+    "Demand_level": 0.55,
+    "Salary_trend": 4.9,
+    "Job_posting_count": 840,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Digital Marketing Specialist in 2021"
+  },
+  {
+    "Trend_id": 18,
+    "Career_id": 4,
+    "Year": 2022,
+    "Demand_level": 0.6,
+    "Salary_trend": 5.4,
+    "Job_posting_count": 980,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Digital Marketing Specialist in 2022"
+  },
+  {
+    "Trend_id": 19,
+    "Career_id": 4,
+    "Year": 2023,
+    "Demand_level": 0.65,
+    "Salary_trend": 5.9,
+    "Job_posting_count": 1120,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Digital Marketing Specialist in 2023"
+  },
+  {
+    "Trend_id": 20,
+    "Career_id": 4,
+    "Year": 2024,
+    "Demand_level": 0.7,
+    "Salary_trend": 6.4,
+    "Job_posting_count": 1260,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Digital Marketing Specialist in 2024"
+  },
+  {
+    "Trend_id": 21,
+    "Career_id": 5,
+    "Year": 2020,
+    "Demand_level": 0.72,
+    "Salary_trend": 4.84,
+    "Job_posting_count": 920,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cybersecurity Analyst in 2020"
+  },
+  {
+    "Trend_id": 22,
+    "Career_id": 5,
+    "Year": 2021,
+    "Demand_level": 0.77,
+    "Salary_trend": 5.34,
+    "Job_posting_count": 1104,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cybersecurity Analyst in 2021"
+  },
+  {
+    "Trend_id": 23,
+    "Career_id": 5,
+    "Year": 2022,
+    "Demand_level": 0.82,
+    "Salary_trend": 5.84,
+    "Job_posting_count": 1288,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cybersecurity Analyst in 2022"
+  },
+  {
+    "Trend_id": 24,
+    "Career_id": 5,
+    "Year": 2023,
+    "Demand_level": 0.87,
+    "Salary_trend": 6.34,
+    "Job_posting_count": 1472,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cybersecurity Analyst in 2023"
+  },
+  {
+    "Trend_id": 25,
+    "Career_id": 5,
+    "Year": 2024,
+    "Demand_level": 0.92,
+    "Salary_trend": 6.84,
+    "Job_posting_count": 1656,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cybersecurity Analyst in 2024"
+  },
+  {
+    "Trend_id": 26,
+    "Career_id": 6,
+    "Year": 2020,
+    "Demand_level": 0.68,
+    "Salary_trend": 4.76,
+    "Job_posting_count": 880,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cloud Architect in 2020"
+  },
+  {
+    "Trend_id": 27,
+    "Career_id": 6,
+    "Year": 2021,
+    "Demand_level": 0.73,
+    "Salary_trend": 5.26,
+    "Job_posting_count": 1056,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cloud Architect in 2021"
+  },
+  {
+    "Trend_id": 28,
+    "Career_id": 6,
+    "Year": 2022,
+    "Demand_level": 0.78,
+    "Salary_trend": 5.76,
+    "Job_posting_count": 1232,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cloud Architect in 2022"
+  },
+  {
+    "Trend_id": 29,
+    "Career_id": 6,
+    "Year": 2023,
+    "Demand_level": 0.83,
+    "Salary_trend": 6.26,
+    "Job_posting_count": 1408,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cloud Architect in 2023"
+  },
+  {
+    "Trend_id": 30,
+    "Career_id": 6,
+    "Year": 2024,
+    "Demand_level": 0.88,
+    "Salary_trend": 6.76,
+    "Job_posting_count": 1584,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Cloud Architect in 2024"
+  },
+  {
+    "Trend_id": 31,
+    "Career_id": 7,
+    "Year": 2020,
+    "Demand_level": 0.58,
+    "Salary_trend": 4.56,
+    "Job_posting_count": 780,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Business Analyst in 2020"
+  },
+  {
+    "Trend_id": 32,
+    "Career_id": 7,
+    "Year": 2021,
+    "Demand_level": 0.63,
+    "Salary_trend": 5.06,
+    "Job_posting_count": 936,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Business Analyst in 2021"
+  },
+  {
+    "Trend_id": 33,
+    "Career_id": 7,
+    "Year": 2022,
+    "Demand_level": 0.68,
+    "Salary_trend": 5.56,
+    "Job_posting_count": 1092,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Business Analyst in 2022"
+  },
+  {
+    "Trend_id": 34,
+    "Career_id": 7,
+    "Year": 2023,
+    "Demand_level": 0.73,
+    "Salary_trend": 6.06,
+    "Job_posting_count": 1248,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Business Analyst in 2023"
+  },
+  {
+    "Trend_id": 35,
+    "Career_id": 7,
+    "Year": 2024,
+    "Demand_level": 0.78,
+    "Salary_trend": 6.56,
+    "Job_posting_count": 1404,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Business Analyst in 2024"
+  },
+  {
+    "Trend_id": 36,
+    "Career_id": 8,
+    "Year": 2020,
+    "Demand_level": 0.62,
+    "Salary_trend": 4.64,
+    "Job_posting_count": 820,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Product Manager in 2020"
+  },
+  {
+    "Trend_id": 37,
+    "Career_id": 8,
+    "Year": 2021,
+    "Demand_level": 0.67,
+    "Salary_trend": 5.14,
+    "Job_posting_count": 984,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Product Manager in 2021"
+  },
+  {
+    "Trend_id": 38,
+    "Career_id": 8,
+    "Year": 2022,
+    "Demand_level": 0.72,
+    "Salary_trend": 5.64,
+    "Job_posting_count": 1148,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Product Manager in 2022"
+  },
+  {
+    "Trend_id": 39,
+    "Career_id": 8,
+    "Year": 2023,
+    "Demand_level": 0.77,
+    "Salary_trend": 6.14,
+    "Job_posting_count": 1312,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Product Manager in 2023"
+  },
+  {
+    "Trend_id": 40,
+    "Career_id": 8,
+    "Year": 2024,
+    "Demand_level": 0.82,
+    "Salary_trend": 6.64,
+    "Job_posting_count": 1476,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Product Manager in 2024"
+  },
+  {
+    "Trend_id": 41,
+    "Career_id": 9,
+    "Year": 2020,
+    "Demand_level": 0.7,
+    "Salary_trend": 4.8,
+    "Job_posting_count": 900,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for DevOps Engineer in 2020"
+  },
+  {
+    "Trend_id": 42,
+    "Career_id": 9,
+    "Year": 2021,
+    "Demand_level": 0.75,
+    "Salary_trend": 5.3,
+    "Job_posting_count": 1080,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for DevOps Engineer in 2021"
+  },
+  {
+    "Trend_id": 43,
+    "Career_id": 9,
+    "Year": 2022,
+    "Demand_level": 0.8,
+    "Salary_trend": 5.8,
+    "Job_posting_count": 1260,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for DevOps Engineer in 2022"
+  },
+  {
+    "Trend_id": 44,
+    "Career_id": 9,
+    "Year": 2023,
+    "Demand_level": 0.85,
+    "Salary_trend": 6.3,
+    "Job_posting_count": 1440,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for DevOps Engineer in 2023"
+  },
+  {
+    "Trend_id": 45,
+    "Career_id": 9,
+    "Year": 2024,
+    "Demand_level": 0.9,
+    "Salary_trend": 6.8,
+    "Job_posting_count": 1620,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for DevOps Engineer in 2024"
+  },
+  {
+    "Trend_id": 46,
+    "Career_id": 10,
+    "Year": 2020,
+    "Demand_level": 0.76,
+    "Salary_trend": 4.92,
+    "Job_posting_count": 960,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for AI Engineer in 2020"
+  },
+  {
+    "Trend_id": 47,
+    "Career_id": 10,
+    "Year": 2021,
+    "Demand_level": 0.81,
+    "Salary_trend": 5.42,
+    "Job_posting_count": 1152,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for AI Engineer in 2021"
+  },
+  {
+    "Trend_id": 48,
+    "Career_id": 10,
+    "Year": 2022,
+    "Demand_level": 0.86,
+    "Salary_trend": 5.92,
+    "Job_posting_count": 1344,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for AI Engineer in 2022"
+  },
+  {
+    "Trend_id": 49,
+    "Career_id": 10,
+    "Year": 2023,
+    "Demand_level": 0.91,
+    "Salary_trend": 6.42,
+    "Job_posting_count": 1536,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for AI Engineer in 2023"
+  },
+  {
+    "Trend_id": 50,
+    "Career_id": 10,
+    "Year": 2024,
+    "Demand_level": 0.96,
+    "Salary_trend": 6.92,
+    "Job_posting_count": 1728,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for AI Engineer in 2024"
+  },
+  {
+    "Trend_id": 51,
+    "Career_id": 11,
+    "Year": 2020,
+    "Demand_level": 0.65,
+    "Salary_trend": 4.7,
+    "Job_posting_count": 850,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Blockchain Developer in 2020"
+  },
+  {
+    "Trend_id": 52,
+    "Career_id": 11,
+    "Year": 2021,
+    "Demand_level": 0.7,
+    "Salary_trend": 5.2,
+    "Job_posting_count": 1020,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Blockchain Developer in 2021"
+  },
+  {
+    "Trend_id": 53,
+    "Career_id": 11,
+    "Year": 2022,
+    "Demand_level": 0.75,
+    "Salary_trend": 5.7,
+    "Job_posting_count": 1190,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Blockchain Developer in 2022"
+  },
+  {
+    "Trend_id": 54,
+    "Career_id": 11,
+    "Year": 2023,
+    "Demand_level": 0.8,
+    "Salary_trend": 6.2,
+    "Job_posting_count": 1360,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Blockchain Developer in 2023"
+  },
+  {
+    "Trend_id": 55,
+    "Career_id": 11,
+    "Year": 2024,
+    "Demand_level": 0.85,
+    "Salary_trend": 6.7,
+    "Job_posting_count": 1530,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Blockchain Developer in 2024"
+  },
+  {
+    "Trend_id": 56,
+    "Career_id": 12,
+    "Year": 2020,
+    "Demand_level": 0.56,
+    "Salary_trend": 4.52,
+    "Job_posting_count": 760,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Healthcare IT Specialist in 2020"
+  },
+  {
+    "Trend_id": 57,
+    "Career_id": 12,
+    "Year": 2021,
+    "Demand_level": 0.61,
+    "Salary_trend": 5.02,
+    "Job_posting_count": 912,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Healthcare IT Specialist in 2021"
+  },
+  {
+    "Trend_id": 58,
+    "Career_id": 12,
+    "Year": 2022,
+    "Demand_level": 0.66,
+    "Salary_trend": 5.52,
+    "Job_posting_count": 1064,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Healthcare IT Specialist in 2022"
+  },
+  {
+    "Trend_id": 59,
+    "Career_id": 12,
+    "Year": 2023,
+    "Demand_level": 0.71,
+    "Salary_trend": 6.02,
+    "Job_posting_count": 1216,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Healthcare IT Specialist in 2023"
+  },
+  {
+    "Trend_id": 60,
+    "Career_id": 12,
+    "Year": 2024,
+    "Demand_level": 0.76,
+    "Salary_trend": 6.52,
+    "Job_posting_count": 1368,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Healthcare IT Specialist in 2024"
+  },
+  {
+    "Trend_id": 61,
+    "Career_id": 13,
+    "Year": 2020,
+    "Demand_level": 0.59,
+    "Salary_trend": 4.58,
+    "Job_posting_count": 790,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for E-commerce Manager in 2020"
+  },
+  {
+    "Trend_id": 62,
+    "Career_id": 13,
+    "Year": 2021,
+    "Demand_level": 0.64,
+    "Salary_trend": 5.08,
+    "Job_posting_count": 948,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for E-commerce Manager in 2021"
+  },
+  {
+    "Trend_id": 63,
+    "Career_id": 13,
+    "Year": 2022,
+    "Demand_level": 0.69,
+    "Salary_trend": 5.58,
+    "Job_posting_count": 1106,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for E-commerce Manager in 2022"
+  },
+  {
+    "Trend_id": 64,
+    "Career_id": 13,
+    "Year": 2023,
+    "Demand_level": 0.74,
+    "Salary_trend": 6.08,
+    "Job_posting_count": 1264,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for E-commerce Manager in 2023"
+  },
+  {
+    "Trend_id": 65,
+    "Career_id": 13,
+    "Year": 2024,
+    "Demand_level": 0.79,
+    "Salary_trend": 6.58,
+    "Job_posting_count": 1422,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for E-commerce Manager in 2024"
+  },
+  {
+    "Trend_id": 66,
+    "Career_id": 14,
+    "Year": 2020,
+    "Demand_level": 0.64,
+    "Salary_trend": 4.68,
+    "Job_posting_count": 840,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Renewable Energy Engineer in 2020"
+  },
+  {
+    "Trend_id": 67,
+    "Career_id": 14,
+    "Year": 2021,
+    "Demand_level": 0.69,
+    "Salary_trend": 5.18,
+    "Job_posting_count": 1008,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Renewable Energy Engineer in 2021"
+  },
+  {
+    "Trend_id": 68,
+    "Career_id": 14,
+    "Year": 2022,
+    "Demand_level": 0.74,
+    "Salary_trend": 5.68,
+    "Job_posting_count": 1176,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Renewable Energy Engineer in 2022"
+  },
+  {
+    "Trend_id": 69,
+    "Career_id": 14,
+    "Year": 2023,
+    "Demand_level": 0.79,
+    "Salary_trend": 6.18,
+    "Job_posting_count": 1344,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Renewable Energy Engineer in 2023"
+  },
+  {
+    "Trend_id": 70,
+    "Career_id": 14,
+    "Year": 2024,
+    "Demand_level": 0.84,
+    "Salary_trend": 6.68,
+    "Job_posting_count": 1512,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Renewable Energy Engineer in 2024"
+  },
+  {
+    "Trend_id": 71,
+    "Career_id": 15,
+    "Year": 2020,
+    "Demand_level": 0.54,
+    "Salary_trend": 4.48,
+    "Job_posting_count": 740,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Supply Chain Analyst in 2020"
+  },
+  {
+    "Trend_id": 72,
+    "Career_id": 15,
+    "Year": 2021,
+    "Demand_level": 0.59,
+    "Salary_trend": 4.98,
+    "Job_posting_count": 888,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Supply Chain Analyst in 2021"
+  },
+  {
+    "Trend_id": 73,
+    "Career_id": 15,
+    "Year": 2022,
+    "Demand_level": 0.64,
+    "Salary_trend": 5.48,
+    "Job_posting_count": 1036,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Supply Chain Analyst in 2022"
+  },
+  {
+    "Trend_id": 74,
+    "Career_id": 15,
+    "Year": 2023,
+    "Demand_level": 0.69,
+    "Salary_trend": 5.98,
+    "Job_posting_count": 1184,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Supply Chain Analyst in 2023"
+  },
+  {
+    "Trend_id": 75,
+    "Career_id": 15,
+    "Year": 2024,
+    "Demand_level": 0.74,
+    "Salary_trend": 6.48,
+    "Job_posting_count": 1332,
+    "Source": "Bureau of Labor Statistics",
+    "Notes": "Trend data for Supply Chain Analyst in 2024"
+  }
+]

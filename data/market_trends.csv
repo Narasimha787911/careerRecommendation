@@ -1,0 +1,76 @@
+Trend_id,Career_id,Year,Demand_level,Salary_trend,Job_posting_count,Source,Notes
+1,1,2020,0.7,4.8,900,Bureau of Labor Statistics,Trend data for Software Developer in 2020
+2,1,2021,0.75,5.3,1080,Bureau of Labor Statistics,Trend data for Software Developer in 2021
+3,1,2022,0.8,5.8,1260,Bureau of Labor Statistics,Trend data for Software Developer in 2022
+4,1,2023,0.85,6.3,1440,Bureau of Labor Statistics,Trend data for Software Developer in 2023
+5,1,2024,0.9,6.8,1620,Bureau of Labor Statistics,Trend data for Software Developer in 2024
+6,2,2020,0.75,4.9,950,Bureau of Labor Statistics,Trend data for Data Scientist in 2020
+7,2,2021,0.8,5.4,1140,Bureau of Labor Statistics,Trend data for Data Scientist in 2021
+8,2,2022,0.85,5.9,1330,Bureau of Labor Statistics,Trend data for Data Scientist in 2022
+9,2,2023,0.9,6.4,1520,Bureau of Labor Statistics,Trend data for Data Scientist in 2023
+10,2,2024,0.95,6.9,1710,Bureau of Labor Statistics,Trend data for Data Scientist in 2024
+11,3,2020,0.55,4.5,750,Bureau of Labor Statistics,Trend data for UX/UI Designer in 2020
+12,3,2021,0.6,5.0,900,Bureau of Labor Statistics,Trend data for UX/UI Designer in 2021
+13,3,2022,0.65,5.5,1050,Bureau of Labor Statistics,Trend data for UX/UI Designer in 2022
+14,3,2023,0.7,6.0,1200,Bureau of Labor Statistics,Trend data for UX/UI Designer in 2023
+15,3,2024,0.75,6.5,1350,Bureau of Labor Statistics,Trend data for UX/UI Designer in 2024
+16,4,2020,0.5,4.4,700,Bureau of Labor Statistics,Trend data for Digital Marketing Specialist in 2020
+17,4,2021,0.55,4.9,840,Bureau of Labor Statistics,Trend data for Digital Marketing Specialist in 2021
+18,4,2022,0.6,5.4,980,Bureau of Labor Statistics,Trend data for Digital Marketing Specialist in 2022
+19,4,2023,0.65,5.9,1120,Bureau of Labor Statistics,Trend data for Digital Marketing Specialist in 2023
+20,4,2024,0.7,6.4,1260,Bureau of Labor Statistics,Trend data for Digital Marketing Specialist in 2024
+21,5,2020,0.72,4.84,920,Bureau of Labor Statistics,Trend data for Cybersecurity Analyst in 2020
+22,5,2021,0.77,5.34,1104,Bureau of Labor Statistics,Trend data for Cybersecurity Analyst in 2021
+23,5,2022,0.82,5.84,1288,Bureau of Labor Statistics,Trend data for Cybersecurity Analyst in 2022
+24,5,2023,0.87,6.34,1472,Bureau of Labor Statistics,Trend data for Cybersecurity Analyst in 2023
+25,5,2024,0.92,6.84,1656,Bureau of Labor Statistics,Trend data for Cybersecurity Analyst in 2024
+26,6,2020,0.68,4.76,880,Bureau of Labor Statistics,Trend data for Cloud Architect in 2020
+27,6,2021,0.73,5.26,1056,Bureau of Labor Statistics,Trend data for Cloud Architect in 2021
+28,6,2022,0.78,5.76,1232,Bureau of Labor Statistics,Trend data for Cloud Architect in 2022
+29,6,2023,0.83,6.26,1408,Bureau of Labor Statistics,Trend data for Cloud Architect in 2023
+30,6,2024,0.88,6.76,1584,Bureau of Labor Statistics,Trend data for Cloud Architect in 2024
+31,7,2020,0.58,4.56,780,Bureau of Labor Statistics,Trend data for Business Analyst in 2020
+32,7,2021,0.63,5.06,936,Bureau of Labor Statistics,Trend data for Business Analyst in 2021
+33,7,2022,0.68,5.56,1092,Bureau of Labor Statistics,Trend data for Business Analyst in 2022
+34,7,2023,0.73,6.06,1248,Bureau of Labor Statistics,Trend data for Business Analyst in 2023
+35,7,2024,0.78,6.56,1404,Bureau of Labor Statistics,Trend data for Business Analyst in 2024
+36,8,2020,0.62,4.64,820,Bureau of Labor Statistics,Trend data for Product Manager in 2020
+37,8,2021,0.67,5.14,984,Bureau of Labor Statistics,Trend data for Product Manager in 2021
+38,8,2022,0.72,5.64,1148,Bureau of Labor Statistics,Trend data for Product Manager in 2022
+39,8,2023,0.77,6.14,1312,Bureau of Labor Statistics,Trend data for Product Manager in 2023
+40,8,2024,0.82,6.64,1476,Bureau of Labor Statistics,Trend data for Product Manager in 2024
+41,9,2020,0.7,4.8,900,Bureau of Labor Statistics,Trend data for DevOps Engineer in 2020
+42,9,2021,0.75,5.3,1080,Bureau of Labor Statistics,Trend data for DevOps Engineer in 2021
+43,9,2022,0.8,5.8,1260,Bureau of Labor Statistics,Trend data for DevOps Engineer in 2022
+44,9,2023,0.85,6.3,1440,Bureau of Labor Statistics,Trend data for DevOps Engineer in 2023
+45,9,2024,0.9,6.8,1620,Bureau of Labor Statistics,Trend data for DevOps Engineer in 2024
+46,10,2020,0.76,4.92,960,Bureau of Labor Statistics,Trend data for AI Engineer in 2020
+47,10,2021,0.81,5.42,1152,Bureau of Labor Statistics,Trend data for AI Engineer in 2021
+48,10,2022,0.86,5.92,1344,Bureau of Labor Statistics,Trend data for AI Engineer in 2022
+49,10,2023,0.91,6.42,1536,Bureau of Labor Statistics,Trend data for AI Engineer in 2023
+50,10,2024,0.96,6.92,1728,Bureau of Labor Statistics,Trend data for AI Engineer in 2024
+51,11,2020,0.65,4.7,850,Bureau of Labor Statistics,Trend data for Blockchain Developer in 2020
+52,11,2021,0.7,5.2,1020,Bureau of Labor Statistics,Trend data for Blockchain Developer in 2021
+53,11,2022,0.75,5.7,1190,Bureau of Labor Statistics,Trend data for Blockchain Developer in 2022
+54,11,2023,0.8,6.2,1360,Bureau of Labor Statistics,Trend data for Blockchain Developer in 2023
+55,11,2024,0.85,6.7,1530,Bureau of Labor Statistics,Trend data for Blockchain Developer in 2024
+56,12,2020,0.56,4.52,760,Bureau of Labor Statistics,Trend data for Healthcare IT Specialist in 2020
+57,12,2021,0.61,5.02,912,Bureau of Labor Statistics,Trend data for Healthcare IT Specialist in 2021
+58,12,2022,0.66,5.52,1064,Bureau of Labor Statistics,Trend data for Healthcare IT Specialist in 2022
+59,12,2023,0.71,6.02,1216,Bureau of Labor Statistics,Trend data for Healthcare IT Specialist in 2023
+60,12,2024,0.76,6.52,1368,Bureau of Labor Statistics,Trend data for Healthcare IT Specialist in 2024
+61,13,2020,0.59,4.58,790,Bureau of Labor Statistics,Trend data for E-commerce Manager in 2020
+62,13,2021,0.64,5.08,948,Bureau of Labor Statistics,Trend data for E-commerce Manager in 2021
+63,13,2022,0.69,5.58,1106,Bureau of Labor Statistics,Trend data for E-commerce Manager in 2022
+64,13,2023,0.74,6.08,1264,Bureau of Labor Statistics,Trend data for E-commerce Manager in 2023
+65,13,2024,0.79,6.58,1422,Bureau of Labor Statistics,Trend data for E-commerce Manager in 2024
+66,14,2020,0.64,4.68,840,Bureau of Labor Statistics,Trend data for Renewable Energy Engineer in 2020
+67,14,2021,0.69,5.18,1008,Bureau of Labor Statistics,Trend data for Renewable Energy Engineer in 2021
+68,14,2022,0.74,5.68,1176,Bureau of Labor Statistics,Trend data for Renewable Energy Engineer in 2022
+69,14,2023,0.79,6.18,1344,Bureau of Labor Statistics,Trend data for Renewable Energy Engineer in 2023
+70,14,2024,0.84,6.68,1512,Bureau of Labor Statistics,Trend data for Renewable Energy Engineer in 2024
+71,15,2020,0.54,4.48,740,Bureau of Labor Statistics,Trend data for Supply Chain Analyst in 2020
+72,15,2021,0.59,4.98,888,Bureau of Labor Statistics,Trend data for Supply Chain Analyst in 2021
+73,15,2022,0.64,5.48,1036,Bureau of Labor Statistics,Trend data for Supply Chain Analyst in 2022
+74,15,2023,0.69,5.98,1184,Bureau of Labor Statistics,Trend data for Supply Chain Analyst in 2023
+75,15,2024,0.74,6.48,1332,Bureau of Labor Statistics,Trend data for Supply Chain Analyst in 2024

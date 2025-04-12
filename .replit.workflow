@@ -1,8 +1,8 @@
 [deployment]
-run = ["sh", "-c", "bash flask_app.sh"]
+run = "python main.py"
+build = ["pip install -r requirements.txt"]
 
-[dev]
-run = ["sh", "-c", "bash flask_app.sh"]
-
+# Workflow to run the Flask app
 [flask_app]
-run = ["sh", "-c", "bash flask_app.sh"]
+run = "python main.py"
+onBoot = false

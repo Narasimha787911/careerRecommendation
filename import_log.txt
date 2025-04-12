@@ -1,0 +1,15 @@
+== Starting batch import process for 100 careers ==
+== Importing careers in batches of 20 ==
+== Importing careers batch 10 to 30 ==
+DEBUG:matplotlib:matplotlib data path: /home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/matplotlib/mpl-data
+DEBUG:matplotlib:CONFIGDIR=/home/runner/workspace/.config/matplotlib
+DEBUG:matplotlib:interactive is False
+DEBUG:matplotlib:platform is linux
+DEBUG:matplotlib:CACHEDIR=/home/runner/workspace/.cache/matplotlib
+DEBUG:matplotlib.font_manager:Using fontManager instance from /home/runner/workspace/.cache/matplotlib/fontlist-v390.json
+INFO:app:Connected to database: postgresql://neondb_owner:npg_0fKwOnUYb9ZC@ep-dawn-dew-a5mwrm9t.us-east-2.aws.neon.tech/neondb?sslmode=require
+INFO:app:Database tables: ['ai_model', 'recommendation', 'career', 'market_trend', 'user', 'feedback', 'assessment', 'user_preference', 'user_skill', 'skill', 'career_skill']
+INFO:__main__:Starting careers import step...
+INFO:__main__:Processing careers 10 to 30 of 448
+INFO:__main__:Loaded 54 skills from database
+INFO:__main__:Imported batch of 5 careers

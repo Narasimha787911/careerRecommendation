@@ -45,7 +45,7 @@ class CareerRecommendationEngine:
         Create TF-IDF vectors for careers
         
         Args:
-            careers: List of career objects with title, description, and skills
+            careers: List of career objects or dictionaries with title, description, and skills
         """
         self.careers = careers
         
@@ -54,14 +54,30 @@ class CareerRecommendationEngine:
         self.career_titles = []
         
         for career in careers:
-            # Combine title, description, and skills
-            skill_text = ' '.join([skill.name + ' ' + (skill.description or '') for skill in career.skills])
-            
-            document = f"{career.title} {career.description or ''} {skill_text} {career.education_required or ''} {career.work_environment or ''}"
-            document = self.preprocess_text(document)
-            
-            career_documents.append(document)
-            self.career_titles.append(career.title)
+            # Check if career is a dictionary (from Kaggle dataset) or an object (from database)
+            if isinstance(career, dict):
+                # For dictionary data (from Kaggle dataset)
+                title = career.get('title', '')
+                description = career.get('description', '')
+                skills = career.get('skills', '')
+                interests = career.get('interests', '')
+                requirements = career.get('requirements', '')
+                
+                document = f"{title} {description} {skills} {interests} {requirements}"
+                document = self.preprocess_text(document)
+                
+                career_documents.append(document)
+                self.career_titles.append(title)
+            else:
+                # For database objects
+                # Combine title, description, and skills
+                skill_text = ' '.join([skill.name + ' ' + (skill.description or '') for skill in career.skills]) if hasattr(career, 'skills') else ''
+                
+                document = f"{career.title} {career.description or ''} {skill_text} {career.education_required or ''} {career.work_environment or ''}"
+                document = self.preprocess_text(document)
+                
+                career_documents.append(document)
+                self.career_titles.append(career.title)
         
         try:
             # Create TF-IDF vectors
@@ -152,16 +168,60 @@ class CareerRecommendationEngine:
     def generate_recommendation_reasoning(self, career, user_data, score):
         """Generate an explanation for why a career was recommended."""
         try:
-            # Get user skills that match career skills
-            user_skills = set([skill.name.lower() for skill in user_data.get('skills', [])])
-            career_skills = set([skill.name.lower() for skill in career.skills])
+            # Check if career is a dictionary (from Kaggle dataset) or an object (from database)
+            if isinstance(career, dict):
+                # For dictionary data (from Kaggle dataset)
+                career_title = career.get('title', '')
+                career_description = career.get('description', '')
+                career_skills_str = career.get('skills', '')
+                career_skills = set([s.strip().lower() for s in career_skills_str.split(',') if s.strip()]) if career_skills_str else set()
+                career_education = career.get('requirements', '').lower()
+                career_growth_rate = None  # This might not be available from Kaggle data
+                career_salary = None  # This might not be available directly
+                
+                if 'salary' in career:
+                    try:
+                        # Clean salary value (remove commas, currency symbols, etc.)
+                        salary_str = str(career['salary']).replace('$', '').replace(',', '')
+                        career_salary = float(salary_str)
+                    except (ValueError, TypeError):
+                        career_salary = None
+                
+                if 'growth_rate' in career:
+                    try:
+                        # Clean growth rate value (remove % symbol)
+                        growth_str = str(career['growth_rate']).replace('%', '')
+                        career_growth_rate = float(growth_str)
+                    except (ValueError, TypeError):
+                        career_growth_rate = None
+            else:
+                # For database objects
+                career_title = career.title
+                career_description = career.description or ''
+                career_skills = set([skill.name.lower() for skill in career.skills]) if hasattr(career, 'skills') else set()
+                career_education = (career.education_required or '').lower()
+                career_growth_rate = career.growth_rate
+                career_salary = career.avg_salary
             
+            # Process user skills
+            user_skills = set()
+            if 'skills' in user_data:
+                user_skills_data = user_data['skills']
+                if isinstance(user_skills_data, list):
+                    for skill in user_skills_data:
+                        if hasattr(skill, 'name'):
+                            user_skills.add(skill.name.lower())
+                        elif isinstance(skill, str):
+                            user_skills.add(skill.lower())
+                elif isinstance(user_skills_data, str):
+                    user_skills = set([s.strip().lower() for s in user_skills_data.split(',') if s.strip()])
+            
+            # Find matching skills
             matching_skills = user_skills.intersection(career_skills)
             
             # Get user education level compatibility
             education_match = "compatible"
             user_education = user_data.get('education_level', '').lower()
-            career_education = (career.education_required or '').lower()
             
             if user_education and career_education:
                 if 'bachelor' in user_education and ('master' in career_education or 'phd' in career_education):
@@ -174,7 +234,7 @@ class CareerRecommendationEngine:
             user_interests = (user_data.get('interests', '') or '').lower()
             
             if user_interests:
-                career_keywords = self.preprocess_text(career.title + ' ' + (career.description or '')).split()
+                career_keywords = self.preprocess_text(career_title + ' ' + career_description).split()
                 interest_keywords = self.preprocess_text(user_interests).split()
                 
                 overlap = sum(1 for kw in interest_keywords if any(kw in ckw for ckw in career_keywords))
@@ -203,18 +263,18 @@ class CareerRecommendationEngine:
                 reasoning += " This field may expose you to new areas beyond your current interests."
             
             # Add career growth information
-            if career.growth_rate:
-                reasoning += f" This career has a {career.growth_rate:.1f}% annual growth rate,"
-                if career.growth_rate > 10:
+            if career_growth_rate:
+                reasoning += f" This career has a {career_growth_rate:.1f}% annual growth rate,"
+                if career_growth_rate > 10:
                     reasoning += " which is excellent."
-                elif career.growth_rate > 5:
+                elif career_growth_rate > 5:
                     reasoning += " which is good."
                 else:
                     reasoning += " which is steady."
             
             # Add salary information
-            if career.avg_salary:
-                reasoning += f" The average salary is ${career.avg_salary:,.0f} per year."
+            if career_salary:
+                reasoning += f" The average salary is ${career_salary:,.0f} per year."
             
             return reasoning
             

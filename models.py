@@ -52,21 +52,84 @@ class Skill(db.Model):
 
 class Career(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(128), nullable=False)
-    description = db.Column(db.Text)
-    avg_salary = db.Column(db.Float)
-    growth_rate = db.Column(db.Float)  # Annual growth rate as a percentage
-    education_required = db.Column(db.String(64))
-    experience_required = db.Column(db.String(64))
-    job_outlook = db.Column(db.Text)
-    work_environment = db.Column(db.Text)
+    name = db.Column(db.String(100), nullable=False)  # Renamed from title to match DB
+    description = db.Column(db.Text, nullable=False)
+    required_skills = db.Column(db.Text, nullable=False)  # Skills as text
+    industry = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime)
     
     # Relationships
     skills = db.relationship('Skill', secondary=career_skill, backref=db.backref('careers', lazy='dynamic'))
     market_trends = db.relationship('MarketTrend', backref='career', lazy='dynamic')
     
+    @property
+    def title(self):
+        """For backward compatibility with existing code"""
+        return self.name
+    
+    @property
+    def avg_salary(self):
+        """Calculate average salary from market trends"""
+        trends = self.market_trends.all()
+        if not trends:
+            return 0
+        latest_trend = max(trends, key=lambda t: t.year) if trends else None
+        return latest_trend.salary_trend if latest_trend else 0
+    
+    @property
+    def growth_rate(self):
+        """Calculate growth rate from market trends"""
+        trends = self.market_trends.all()
+        if len(trends) < 2:
+            return 0
+        sorted_trends = sorted(trends, key=lambda t: t.year, reverse=True)
+        if len(sorted_trends) >= 2:
+            latest = sorted_trends[0]
+            previous = sorted_trends[1]
+            if previous.demand_level > 0:
+                return ((latest.demand_level - previous.demand_level) / previous.demand_level) * 100
+        return 0
+    
+    @property
+    def education_required(self):
+        """Extract education requirements from description"""
+        # Simple implementation - in a real app, you'd use NLP to extract this
+        return "Bachelor's Degree"
+    
+    @property
+    def experience_required(self):
+        """Extract experience requirements from description"""
+        # Simple implementation - in a real app, you'd use NLP to extract this
+        return "2-5 years"
+    
+    @property
+    def job_outlook(self):
+        """Generate job outlook from market trends"""
+        trends = self.market_trends.all()
+        if not trends:
+            return "No data available"
+        
+        latest_trend = max(trends, key=lambda t: t.year) if trends else None
+        if not latest_trend:
+            return "No data available"
+        
+        if latest_trend.demand_level > 0.7:
+            return "Excellent job outlook with high demand"
+        elif latest_trend.demand_level > 0.5:
+            return "Good job outlook with steady demand"
+        elif latest_trend.demand_level > 0.3:
+            return "Moderate job outlook"
+        else:
+            return "Limited job outlook"
+    
+    @property
+    def work_environment(self):
+        """Return work environment information"""
+        # Simple implementation
+        return f"Typical work environment in {self.industry} industry"
+        
     def __repr__(self):
-        return f'<Career {self.title}>'
+        return f'<Career {self.name}>'
 
 class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,25 +140,21 @@ class Assessment(db.Model):
     strengths = db.Column(db.String(256))  # JSON string or comma-separated values
     weaknesses = db.Column(db.String(256))  # JSON string or comma-separated values
     
-    # Relationships
-    recommendations = db.relationship('Recommendation', backref='assessment', lazy='dynamic')
-    
     def __repr__(self):
         return f'<Assessment {self.id} for User {self.user_id}>'
 
 class Recommendation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    assessment_id = db.Column(db.Integer, db.ForeignKey('assessment.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     career_id = db.Column(db.Integer, db.ForeignKey('career.id'), nullable=False)
-    match_score = db.Column(db.Float)  # Percentage match
-    reasoning = db.Column(db.Text)  # Explanation for the recommendation
-    date_generated = db.Column(db.DateTime, default=datetime.utcnow)
+    score = db.Column(db.Float)  # Percentage match
+    date_time = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relationships
     career = db.relationship('Career')
     
     def __repr__(self):
-        return f'<Recommendation {self.id} for Assessment {self.assessment_id}>'
+        return f'<Recommendation {self.id} for User {self.user_id}>'
 
 class UserPreference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -113,15 +172,54 @@ class UserPreference(db.Model):
 class MarketTrend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     career_id = db.Column(db.Integer, db.ForeignKey('career.id'), nullable=False)
-    year = db.Column(db.Integer, nullable=False)
-    demand_level = db.Column(db.Float)  # Scale 0-1
-    salary_trend = db.Column(db.Float)  # Percentage change
-    job_posting_count = db.Column(db.Integer)
-    source = db.Column(db.String(128))
-    notes = db.Column(db.Text)
+    demand_level = db.Column(db.Float, nullable=False)  # Scale 0-1
+    salary_range = db.Column(db.String(50), nullable=False)  # Renamed from salary_trend
+    updated_at = db.Column(db.DateTime)  # Instead of year field
+    
+    # Virtual properties to maintain compatibility with existing code
+    @property
+    def year(self):
+        """Calculate year from updated_at"""
+        if self.updated_at:
+            return self.updated_at.year
+        return 2025  # Default to current year
+    
+    @property
+    def salary_trend(self):
+        """Extract numeric salary trend from salary_range"""
+        if not self.salary_range:
+            return 0
+        
+        # Try to extract a percentage or number
+        try:
+            # If it's a range like "50000-70000"
+            if '-' in self.salary_range:
+                low, high = self.salary_range.split('-')
+                return (float(high) - float(low)) / float(low) * 100  # Percentage increase
+            
+            # If it's just a percentage like "5%" or "5"
+            return float(self.salary_range.strip('%'))
+        except:
+            return 0
+    
+    @property
+    def job_posting_count(self):
+        """Calculated based on demand level as we don't have actual data"""
+        return int(1000 * self.demand_level)
+    
+    @property
+    def source(self):
+        """Default source information"""
+        return "Career Recommendation System"
+    
+    @property
+    def notes(self):
+        """Default notes"""
+        return None
     
     def __repr__(self):
-        return f'<MarketTrend for Career {self.career_id} in {self.year}>'
+        year_str = self.year if hasattr(self, 'updated_at') and self.updated_at else "Unknown"
+        return f'<MarketTrend for Career {self.career_id} in {year_str}>'
 
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
