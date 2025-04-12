@@ -28,13 +28,14 @@ def index():
 def register():
     """User registration route"""
     if request.method == 'POST':
+        username = request.form.get('username')
         name = request.form.get('name')
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         
         # Validation
-        if not name or not email or not password:
+        if not username or not name or not email or not password:
             flash('All fields are required', 'danger')
             return render_template('register.html')
             
@@ -43,13 +44,18 @@ def register():
             return render_template('register.html')
             
         # Check if user already exists
-        existing_user = User.query.filter_by(email=email).first()
-        if existing_user:
+        existing_email = User.query.filter_by(email=email).first()
+        if existing_email:
             flash('Email already exists', 'danger')
             return render_template('register.html')
             
+        existing_username = User.query.filter_by(username=username).first()
+        if existing_username:
+            flash('Username already exists', 'danger')
+            return render_template('register.html')
+            
         # Create new user
-        new_user = User(name=name, email=email)
+        new_user = User(username=username, name=name, email=email)
         new_user.set_password(password)
         
         try:
@@ -68,10 +74,14 @@ def register():
 def login():
     """User login route"""
     if request.method == 'POST':
-        username = request.form.get('username')
+        login_id = request.form.get('login_id')
         password = request.form.get('password')
         
-        user = User.query.filter_by(username=username).first()
+        # Check if login_id is an email or username
+        if '@' in login_id:
+            user = User.query.filter_by(email=login_id).first()
+        else:
+            user = User.query.filter_by(username=login_id).first()
         
         if user and user.check_password(password):
             login_user(user)
@@ -79,7 +89,7 @@ def login():
             next_page = request.args.get('next')
             return redirect(next_page or url_for('dashboard'))
         else:
-            flash('Invalid username or password', 'danger')
+            flash('Invalid username/email or password', 'danger')
             
     return render_template('login.html')
 
@@ -123,18 +133,11 @@ def profile():
     
     if request.method == 'POST':
         # Update profile information
-        current_user.first_name = request.form.get('first_name')
-        current_user.last_name = request.form.get('last_name')
-        current_user.bio = request.form.get('bio')
-        current_user.education_level = request.form.get('education_level')
-        
-        # Parse date of birth
-        dob_str = request.form.get('date_of_birth')
-        if dob_str:
-            try:
-                current_user.date_of_birth = datetime.strptime(dob_str, '%Y-%m-%d').date()
-            except ValueError:
-                flash('Invalid date format for date of birth', 'danger')
+        current_user.name = request.form.get('name')
+        current_user.age = request.form.get('age', type=int)
+        current_user.education = request.form.get('education')
+        current_user.experience = request.form.get('experience')
+        current_user.interests = request.form.get('interests')
         
         # Update skills
         selected_skill_ids = request.form.getlist('skills')
@@ -227,7 +230,7 @@ def generate_recommendations(assessment_id):
         'interests': assessment.interests,
         'strengths': assessment.strengths,
         'personality_traits': assessment.personality_traits,
-        'education_level': current_user.education_level,
+        'education_level': current_user.education,
         'preferences': UserPreference.query.filter_by(user_id=current_user.id).first()
     }
     
