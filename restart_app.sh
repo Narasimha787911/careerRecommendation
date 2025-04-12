@@ -1,20 +1,14 @@
 #!/bin/bash
-# Stop any existing Flask process
+
+# Kill any existing Python processes
 pkill -f "python main.py" || true
-echo "Starting Career Recommendation System..."
-# Clear previous log
-> flask_app.log
-# Start the app in the background
-nohup python -u main.py > flask_app.log 2>&1 &
-pid=$!
-echo "Application started with PID: $pid. Check flask_app.log for details."
-# Give the app a moment to start up
-sleep 3
-# Check if the process is still running
-if ps -p $pid > /dev/null; then
-    echo "Application is running successfully."
-    tail -n 5 flask_app.log
-else
-    echo "Application failed to start. Error log:"
-    cat flask_app.log
-fi
+
+# Wait a moment to ensure processes are terminated
+sleep 1
+
+# Start the application in the background
+nohup python main.py > flask_app.log 2>&1 &
+
+# Echo the status
+echo "Flask application restarted"
+echo "Run 'tail -f flask_app.log' to view logs"

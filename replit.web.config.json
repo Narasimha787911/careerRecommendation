@@ -1,8 +1,18 @@
 {
-  "port": 5000,
+  "run": "bash run_flask_app.sh",
+  "language": "python",
+  "environment": "python3",
+  "output": "Flask application running on port 5002",
+  "packages": [
+    "flask",
+    "flask-login", 
+    "flask-sqlalchemy",
+    "flask-wtf",
+    "numpy",
+    "scikit-learn",
+    "nltk",
+    "matplotlib"
+  ],
   "host": "0.0.0.0",
-  "entrypoint": "main.py",
-  "environment": {
-    "FLASK_DEBUG": "1"
-  }
+  "port": 5002
 }

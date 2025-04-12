@@ -22,7 +22,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(256))
     age = db.Column(db.Integer)
     interests = db.Column(db.Text)
-    skills = db.Column(db.Text)
+    skills_text = db.Column(db.Text)  # Keep as a backup for text skills
     education = db.Column(db.Text)
     experience = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -31,6 +31,7 @@ class User(UserMixin, db.Model):
     assessments = db.relationship('Assessment', backref='user', lazy='dynamic')
     preferences = db.relationship('UserPreference', backref='user', uselist=False)
     feedbacks = db.relationship('Feedback', backref='user', lazy='dynamic')
+    skills = db.relationship('Skill', secondary=user_skill, backref=db.backref('users', lazy='dynamic'))
     
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

@@ -121,7 +121,7 @@ def dashboard():
 def profile():
     """User profile route"""
     # Get user skills
-    user_skills = current_user.skills
+    user_skills = current_user.skills.all() if hasattr(current_user, 'skills') else []
     all_skills = Skill.query.all()
     
     # Get or create user preferences
@@ -142,7 +142,11 @@ def profile():
         # Update skills
         selected_skill_ids = request.form.getlist('skills')
         selected_skills = Skill.query.filter(Skill.id.in_(selected_skill_ids)).all()
-        current_user.skills = selected_skills
+        
+        # Clear existing skills and add the selected ones
+        current_user.skills = []
+        for skill in selected_skills:
+            current_user.skills.append(skill)
         
         # Update preferences
         preferences.salary_preference = request.form.get('salary_preference')
@@ -226,7 +230,7 @@ def generate_recommendations(assessment_id):
     
     # Prepare user data
     user_data = {
-        'skills': current_user.skills,
+        'skills': current_user.skills.all() if hasattr(current_user, 'skills') else [],
         'interests': assessment.interests,
         'strengths': assessment.strengths,
         'personality_traits': assessment.personality_traits,
