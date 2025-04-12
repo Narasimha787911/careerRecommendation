@@ -121,7 +121,7 @@ def dashboard():
 def profile():
     """User profile route"""
     # Get user skills
-    user_skills = current_user.skills.all() if hasattr(current_user, 'skills') else []
+    user_skills = current_user.skills if hasattr(current_user, 'skills') else []
     all_skills = Skill.query.all()
     
     # Get or create user preferences
