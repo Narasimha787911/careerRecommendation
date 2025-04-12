@@ -120,46 +120,47 @@ def dashboard():
 @login_required
 def profile():
     """User profile route"""
-    # Get user skills
+
+    # Correct way: current_user.skills is a list, no .all() needed
     user_skills = current_user.skills if hasattr(current_user, 'skills') else []
+
+    # Query all skills from DB for the dropdown
     all_skills = Skill.query.all()
-    
-    # Get or create user preferences
+
+    # Fetch or create the user's preferences
     preferences = UserPreference.query.filter_by(user_id=current_user.id).first()
     if not preferences:
         preferences = UserPreference(user_id=current_user.id)
         db.session.add(preferences)
         db.session.commit()
-    
+
     if request.method == 'POST':
-        # Update profile information
+        # Update user basic info
         current_user.name = request.form.get('name')
         current_user.age = request.form.get('age', type=int)
         current_user.education = request.form.get('education')
         current_user.experience = request.form.get('experience')
         current_user.interests = request.form.get('interests')
-        
+
         # Update skills
-        selected_skill_ids = request.form.getlist('skills')
+        selected_skill_ids = request.form.getlist('skills')  # list of skill IDs as strings
         selected_skills = Skill.query.filter(Skill.id.in_(selected_skill_ids)).all()
-        
-        # Clear existing skills and add the selected ones
-        current_user.skills = []
-        for skill in selected_skills:
-            current_user.skills.append(skill)
-        
+
+        # Replace user's skills
+        current_user.skills = selected_skills
+
         # Update preferences
         preferences.salary_preference = request.form.get('salary_preference')
         preferences.location_preference = request.form.get('location_preference')
         preferences.remote_work = 'remote_work' in request.form
-        
+
         try:
             preferences.work_life_balance = int(request.form.get('work_life_balance', 5))
             preferences.job_security = int(request.form.get('job_security', 5))
             preferences.growth_opportunity = int(request.form.get('growth_opportunity', 5))
         except (ValueError, TypeError):
             flash('Invalid values for preference scales', 'warning')
-        
+
         try:
             db.session.commit()
             flash('Profile updated successfully', 'success')
@@ -168,12 +169,12 @@ def profile():
             db.session.rollback()
             logger.error(f"Error updating profile: {e}")
             flash('An error occurred while updating your profile', 'danger')
-    
-    return render_template('profile.html', 
-                          user=current_user, 
-                          user_skills=user_skills,
-                          all_skills=all_skills,
-                          preferences=preferences)
+
+    return render_template('profile.html',
+                           user=current_user,
+                           user_skills=user_skills,
+                           all_skills=all_skills,
+                           preferences=preferences)
 
 @app.route('/assessment', methods=['GET', 'POST'])
 @login_required
